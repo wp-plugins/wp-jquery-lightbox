@@ -17,6 +17,8 @@ It provides an admin panel for configuration, (optional) auto-boxing of your ima
 
 You can configure the animation speed and disable image resizing (if you don't want the plugin to fit images to smaller monitors).
 
+See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
+
 == Installation ==
 
 1. Upload the `wp-jquery-lightbox`-folder to the `/wp-content/plugins/` directory

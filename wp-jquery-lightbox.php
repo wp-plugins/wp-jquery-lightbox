@@ -23,7 +23,7 @@ add_filter("plugin_action_links_$plugin", 'jqlb_add_plugin_actions' );
 add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
 add_filter('the_excerpt', 'jqlb_autoexpand_rel_wlightbox', 99);
 function jqlb_add_plugin_actions( $links ) { // Add a link to this plugin's settings page
-	$settings_link = '<a href="/wp-admin/options-general.php?page=jquery-lightbox-options">Settings</a>'; 
+	$settings_link = '<a href="' . get_option('siteurl') . '/wp-admin/options-general.php?page=jquery-lightbox-options">Settings</a>'; 	
 	array_unshift( $links, $settings_link ); 
 	return $links; 
 }

@@ -38,14 +38,14 @@ function jqlb_register_menu_item() {
 }
 function jqlb_css(){
 	if(is_admin() || is_feed()){return;}
-	wp_enqueue_style('jquery.lightbox.css', JQLB_STYLE_URL, false, '0.5');
+	wp_enqueue_style('jquery.lightbox.css', JQLB_STYLE_URL, false, '1.1');
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
 	wp_deregister_script('jquery');
 	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 	wp_enqueue_script('jquery', '', array(), '1.4.2', true);			
-	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '0.5', true);
+	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.1', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed')

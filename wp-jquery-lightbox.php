@@ -3,7 +3,7 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.0
+Version: 1.1
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
@@ -109,9 +109,9 @@ function jqlb_options_panel(){
 	<em>Optional: </em>Use the <code>title</code> attribute if you want to show a caption.
 	</li> 
 	<li>If you have a set of related images that you would like to group, follow step one but additionally include a group name in the rel attribute. For example:
-<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;roadtrip[roadtrip]&quot;&gt;image #1&lt;/a&gt;
-	&lt;a href=&quot;images/image-2.jpg&quot; rel=&quot;roadtrip[roadtrip]&quot;&gt;image #2&lt;/a&gt;
-	&lt;a href=&quot;images/image-3.jpg&quot; rel=&quot;roadtrip[roadtrip]&quot;&gt;image #3&lt;/a&gt;</code></pre> 
+<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #1&lt;/a&gt;
+	&lt;a href=&quot;images/image-2.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #2&lt;/a&gt;
+	&lt;a href=&quot;images/image-3.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #3&lt;/a&gt;</code></pre> 
 	No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!</li> 
 	<li>You can safely use WordPress image galleries and have them grouped and auto-lightboxed: <code>[gallery link="file"]</code></li> 	
 	</ol>	

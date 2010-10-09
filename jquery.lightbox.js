@@ -285,7 +285,9 @@
 	    };
 	    
 	    function updateDetails() {
-		    jQuery('#numberDisplay').html('');
+		    jQuery('#numberDisplay').html('');			
+			jQuery('#imageDataContainer').slideDown('fast');
+			jQuery('#caption').hide();			
 		    if(opts.imageArray[opts.activeImage][1]){
 			    jQuery('#caption').html(opts.imageArray[opts.activeImage][1]).show();
 		    }

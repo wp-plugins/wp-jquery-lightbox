@@ -3,8 +3,8 @@ Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
-Tested up to: 2.9.2
-Stable tag: 1.0
+Tested up to: 3.0.1
+Stable tag: 1.1
 
 A drop in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
 
@@ -33,11 +33,11 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 	
 1. If you have a set of related images that you would like to group, follow step one but additionally include a group name in the rel attribute. For example:
 	
-	`<a href="image-1.jpg" rel="roadtrip[roadtrip]">image #1</a>`
+	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
 	
-	`<a href="image-2.jpg" rel="roadtrip[roadtrip]">image #2</a>`
+	`<a href="image-2.jpg" rel="lightbox[roadtrip]">image #2</a>`
 	
-	`<a href="image-3.jpg" rel="roadtrip[roadtrip]">image #3</a>`
+	`<a href="image-3.jpg" rel="lightbox[roadtrip]">image #3</a>`
 
 Optional: Use the title attribute if you want to show a caption.
 
@@ -47,10 +47,18 @@ No limits to the number of image sets per page or how many images are allowed in
 
 == Changelog ==
 
+= 1.1 =
+* Honors empty captions. 
+* Fixed typos on admin page.
+* (thanks, josephknight! http://tinyurl.com/3677p6r)
+
 = 1.0 =
 * Release.
 
 == Upgrade Notice ==
+
+= 1.1 =
+Honors empty captions and fixes some typos.
 
 = 1.0 =
 First release.

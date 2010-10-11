@@ -6,14 +6,14 @@ Requires at least: 2.9.2
 Tested up to: 3.0.1
 Stable tag: 1.1
 
-A drop in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
+A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
 
 == Description ==
 
 This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com/projects/lightbox2/)-functionality, but sheds the bulk of the Prototype Framework **and** Scriptaculous Effects Library.
 
 Warren Krewenki [ported Lightbox over to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work. 
-It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries.
+It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions
 
 You can configure the animation speed and disable image resizing (if you don't want the plugin to fit images to smaller monitors).
 
@@ -46,6 +46,11 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!
 
 == Changelog ==
+
+= 1.2 =
+* Added support for Media Library titles and captions.
+* Minified the javascript (8.6KB vs 17.8KB)
+* Minified the CSS (2.0KB vs 2.7KB)
 
 = 1.1 =
 * Honors empty captions. 

@@ -10,13 +10,17 @@
  * Originally written to make use of the Prototype framework, and Script.acalo.us, now altered to use jQuery.
  *
  * This file was lightly modified by Ulf Benjaminsson (http://www.ulfben.com) for use in the WP jQuery Lightbox-
- * plugin. Modifications include:
+ * plugin. (http://wordpress.org/extend/plugins/wp-jquery-lightbox/)
+ *  Modifications include:
  *	0. using no-conflict mode (for good measure)
  *	1. improved the resizing code
  *	2. using rel attribute instead of class
  *	3. auto-lightboxing all links after page load
  *	4. using WordPress API to localize script (with safe fallbacks)
  *	5. replaced explicit IMG-urls with divs, styled through the CSS.
+ *	6. honors empty captions / titles
+ *	7. grabs image caption from WordPress [gallery] or media library output
+ *	8. grabs image title if the link lacks one
  *
  **/
 (function(jQuery){
@@ -55,9 +59,9 @@
 		    var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + opts.strings.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + opts.strings.nextLinkTitle + '"></a></div><div id="loading"><a href="javascript://" id="loadingLink"><div id="jqlb_loading"></div></a></div></div></div>';
 		    var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><span id="numberDisplay"></span></div><div id="bottomNav">';
 
-		    if (opts.displayHelp)
+		    if (opts.displayHelp){
 			    imageData += '<span id="helpDisplay">' + opts.strings.help + '</span>';
-
+			}
 		    imageData += '<a href="javascript://" id="bottomNavClose" title="' + opts.strings.closeTitle + '"><div id="jqlb_closelabel"></div></a></div></div></div>';
 
 		    var string;
@@ -91,7 +95,6 @@
 	    
 	    function getPageScroll() {
 		    var xScroll, yScroll;
-
 		    if (self.pageYOffset) {
 			    yScroll = self.pageYOffset;
 			    xScroll = self.pageXOffset;
@@ -102,7 +105,6 @@
 			    yScroll = document.body.scrollTop;
 			    xScroll = document.body.scrollLeft;
 		    }
-
 		    var arrayPageScroll = new Array(xScroll,yScroll);
 		    return arrayPageScroll;
 	    };
@@ -113,25 +115,52 @@
 		    do{curDate = new Date();}
 		    while(curDate - date < ms);
 	    };
-	    
+		
 	    function start(imageLink) {
 		    jQuery("select, embed, object").hide();
 		    var arrayPageSize = getPageSize();
 		    jQuery("#overlay").hide().css({width: '100%', height: arrayPageSize[1]+'px', opacity : opts.overlayOpacity}).fadeIn(400);
 		    imageNum = 0;
-
 		    // if data is not provided by jsonData parameter
             if(!opts.jsonData) {
-                opts.imageArray = [];
-		        // if image is NOT part of a set..
+                opts.imageArray = [];				
+		        // if image is NOT part of a set..				
 		        if(!imageLink.rel || (imageLink.rel == '')){
 			        // add single image to Lightbox.imageArray
-			        opts.imageArray.push(new Array(imageLink.href, opts.displayTitle ? imageLink.title : ''));
-		        } else {
+					var s = '';
+					if(imageLink.title){
+						s = imageLink.title;
+					}else if(jQuery(this).children(':first-child').attr('title')){
+						s = jQuery(this).children(':first-child').attr('title');
+					}										
+					alert("single");
+			        opts.imageArray.push(new Array(imageLink.href, opts.displayTitle ? s : ''));
+		        } else {								
 		        // if image is part of a set..
 			        jQuery("a").each(function(){
 				        if(this.href && (this.rel == imageLink.rel)){
-					        opts.imageArray.push(new Array(this.href, opts.displayTitle ? this.title : ''));
+							var title = '';
+							var caption = '';
+							var jqThis = jQuery(this);
+							if(this.title){
+								title = this.title;
+							}else if(jqThis.children('img:first-child').attr('title')){
+								title = jqThis.children('img:first-child').attr('title');//grab the title from the image if the link lacks one
+							}							
+							if(jqThis.parent().next('.gallery-caption').html()){															
+								caption = jqThis.parent().next('.gallery-caption').html();
+							}else if(jqThis.next('.wp-caption-text').html()){								
+								caption = jqThis.next('.wp-caption-text').html();								
+							}
+							var s = '';
+							if(title != '' && caption != ''){
+								s = title+'<br />'+caption;
+							}else if(title != ''){
+								s = title;
+							}else if(caption != ''){
+								s = caption;
+							}						
+					        opts.imageArray.push(new Array(this.href, opts.displayTitle ? s : ''));							
 				        }
 			        });
 		        }
@@ -141,7 +170,7 @@
 		        for(i = 0; i < opts.imageArray.length; i++){
 				    for(j = opts.imageArray.length-1; j>i; j--){
 					    if(opts.imageArray[i][0] == opts.imageArray[j][0]){
-						    opts.imageArray.splice(j,1);
+						   opts.imageArray.splice(j,1); 
 					    }
 				    }
 			    }
@@ -155,9 +184,9 @@
 		    jQuery('#lightbox').css({top: lightboxTop+'px', left: lightboxLeft+'px'}).show();
 
 
-		    if (!opts.slideNavBar)
+		    if (!opts.slideNavBar){
 			    jQuery('#imageData').hide();
-
+			}
 		    changeImage(imageNum);
 	    };
 	    

@@ -13,11 +13,13 @@ A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of P
 This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com/projects/lightbox2/)-functionality, but sheds the bulk of the Prototype Framework **and** Scriptaculous Effects Library.
 
 Warren Krewenki [ported Lightbox over to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work. 
-It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions
+It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions.
 
-You can configure the animation speed and disable image resizing (if you don't want the plugin to fit images to smaller monitors).
+Navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
+
+*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
 
 == Installation ==
 
@@ -47,23 +49,38 @@ No limits to the number of image sets per page or how many images are allowed in
 
 == Changelog ==
 
-= 1.2 =
+= 1.2 (2010-10-12) = 
 * Added support for Media Library titles and captions.
 * Minified the javascript (8.6KB vs 17.8KB)
 * Minified the CSS (2.0KB vs 2.7KB)
 
-= 1.1 =
+= 1.1 (2010-10-09) = 
 * Honors empty captions. 
 * Fixed typos on admin page.
 * (thanks, josephknight! http://tinyurl.com/3677p6r)
 
-= 1.0 =
+= 1.0 (2010-04-11) = 
 * Release.
 
 == Upgrade Notice ==
+
+= 1.2 =
+Support caption and titles from the Media Library
 
 = 1.1 =
 Honors empty captions and fixes some typos.
 
 = 1.0 =
 First release.
+
+== Frequently Asked Questions ==
+
+= Must fade-in and animation of all *box-scripts be so slow? =
+
+WP-jQuery Lightbox lets you configure the animation speed and disable image resizing from the admin panel.
+
+= Can I help you in any way? =
+
+Absolutely! If you [download & install DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) on my refferal, I get 1GB (much needed!) extra space. DropBox is a cross-plattform application to sync your files online and across computers, and a 2GB account is *free*. Also - my refferal earns you a 250MB bonus! 
+
+If you've had any commercial applications for my plugins, please consider [sending me a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x). (used are fine!) 

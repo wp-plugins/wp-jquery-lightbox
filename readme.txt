@@ -21,6 +21,13 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
 
+= 1.2 (2010-10-12) = 
+* Added support for Media Library titles and captions.
+* Minified the javascript (8.6KB vs 17.8KB)
+* Minified the CSS (2.0KB vs 2.7KB)
+
+[Older changelogs moved here.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/changelog/)
+
 == Installation ==
 
 1. Upload the `wp-jquery-lightbox`-folder to the `/wp-content/plugins/` directory

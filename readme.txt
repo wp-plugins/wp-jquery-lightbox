@@ -15,7 +15,7 @@ This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com
 Warren Krewenki [ported Lightbox over to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work. 
 It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions.
 
-Navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
+You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
 

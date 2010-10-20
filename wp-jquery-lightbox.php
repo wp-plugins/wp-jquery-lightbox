@@ -13,20 +13,27 @@ if(!defined('WP_CONTENT_URL')){
 if(!defined('WP_PLUGIN_URL')){
 	define('WP_PLUGIN_URL', WP_CONTENT_URL.'/plugins');
 }
+define('JQLB_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
+define('JQLB_BASENAME', plugin_basename( __FILE__ ));
 define('JQLB_URL', WP_PLUGIN_URL.'/wp-jquery-lightbox/');
 define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
 define('JQLB_STYLE_URL', JQLB_URL.'lightbox.min.css');
 add_action('admin_menu', 'jqlb_register_menu_item');
 add_action('wp_print_styles', 'jqlb_css');	
 add_action('wp_print_scripts', 'jqlb_js');
-add_filter("plugin_action_links_$plugin", 'jqlb_add_plugin_actions' ); 
+add_filter('plugin_row_meta', 	'jqlb_set_plugin_meta', 2, 10);	
 add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
 add_filter('the_excerpt', 'jqlb_autoexpand_rel_wlightbox', 99);
-function jqlb_add_plugin_actions( $links ) { // Add a link to this plugin's settings page
-	$settings_link = '<a href="' . get_option('siteurl') . '/wp-admin/options-general.php?page=jquery-lightbox-options">Settings</a>'; 	
-	array_unshift( $links, $settings_link ); 
+function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
+	if($file == JQLB_BASENAME) {
+		return array_merge($links, array(sprintf( '<a href="%s/wp-admin/options-general.php?page=%s">%s</a>', get_option('siteurl'), JQLB_BASENAME, __('Settings', 'wpdtree'))));
+	}
 	return $links; 
 }
+function jqlb_add_admin_footer(){ //shows some plugin info in the footer of the config screen.
+	$plugin_data = get_plugin_data(__FILE__);
+	printf('%1$s by %2$s (who <a href="'.JQLB_DONATE_URL.'">appreciates books</a>) :)<br />', $plugin_data['Title'].' '.$plugin_data['Version'], $plugin_data['Author']);		
+}	
 function jqlb_register_menu_item() {	
 	register_setting( 'jqlb-settings-group', 'jqlb_automate'); 
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_on_demand');
@@ -69,7 +76,9 @@ function jqlb_pos_intval($v){
 function jqlb_options_panel(){
 	if(!function_exists('current_user_can') || !current_user_can('manage_options')){
 			die(__('Cheatin&#8217; uh?'));
-	} ?> 
+	} 
+	add_action('in_admin_footer', 'jqlb_add_admin_footer');
+	?> 
 	<div class="wrap">
 	<h2>jQuery Lightbox</h2>
 	<form method="post" action="options.php">

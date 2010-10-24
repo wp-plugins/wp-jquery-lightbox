@@ -21,6 +21,7 @@
  *	6. honors empty captions / titles
  *	7. grabs image caption from WordPress [gallery] or media library output
  *	8. grabs image title if the link lacks one
+ *	9. use only title if captions is identical
  *
  **/
 (function(jQuery){
@@ -132,8 +133,7 @@
 						s = imageLink.title;
 					}else if(jQuery(this).children(':first-child').attr('title')){
 						s = jQuery(this).children(':first-child').attr('title');
-					}										
-					alert("single");
+					}														
 			        opts.imageArray.push(new Array(imageLink.href, opts.displayTitle ? s : ''));
 		        } else {								
 		        // if image is part of a set..
@@ -141,6 +141,7 @@
 				        if(this.href && (this.rel == imageLink.rel)){
 							var title = '';
 							var caption = '';
+							var captionText = '';
 							var jqThis = jQuery(this);
 							if(this.title){
 								title = this.title;
@@ -148,10 +149,19 @@
 								title = jqThis.children('img:first-child').attr('title');//grab the title from the image if the link lacks one
 							}							
 							if(jqThis.parent().next('.gallery-caption').html()){															
-								caption = jqThis.parent().next('.gallery-caption').html();
+								var jq = jqThis.parent().next('.gallery-caption');
+								caption = jq.html();
+								captionText = jq.text();
 							}else if(jqThis.next('.wp-caption-text').html()){								
-								caption = jqThis.next('.wp-caption-text').html();								
+								caption = jqThis.next('.wp-caption-text').html();				
+								captionText = jqThis.next('.wp-caption-text').text();				
 							}
+							title = jQuery.trim(title);
+							captionText = jQuery.trim(captionText);
+							if(title.toLowerCase() == captionText.toLowerCase()){
+								title = caption;//to keep linked captions
+								caption = ''; //but not duplicate the text								
+							}						
 							var s = '';
 							if(title != '' && caption != ''){
 								s = title+'<br />'+caption;

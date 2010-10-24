@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
 Tested up to: 3.0.1
-Stable tag: 1.2
+Stable tag: 1.2.1
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
 
@@ -20,6 +20,10 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
+
+= 1.2.1 (2010-10-24) =
+* [Use only caption if title is identical](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=8#post-1748874)
+* Removed a forgotten debug call
 
 = 1.2 (2010-10-12) = 
 * Added support for Media Library titles and captions.
@@ -56,6 +60,10 @@ No limits to the number of image sets per page or how many images are allowed in
 
 == Changelog ==
 
+= 1.2.1 (2010-10-24) =
+* [Use only caption if title is identical](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=8#post-1748874)
+* Removed a forgotten debug call
+
 = 1.2 (2010-10-12) = 
 * Added support for Media Library titles and captions.
 * Minified the javascript (8.6KB vs 17.8KB)
@@ -70,6 +78,9 @@ No limits to the number of image sets per page or how many images are allowed in
 * Release.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Removed forgotten debug call. Important upgrade!
 
 = 1.2 =
 Support caption and titles from the Media Library

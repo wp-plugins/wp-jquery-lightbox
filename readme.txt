@@ -3,7 +3,7 @@ Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
-Tested up to: 3.0.1
+Tested up to: 3.1.1
 Stable tag: 1.2.2
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
@@ -22,7 +22,8 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
 
 = 1.2.2 (2011-04-14) =
-* Uses WordPress bundled jQuery instead of forcing the Google CDN.
+* Use WordPress bundled jQuery instead of forcing the Google CDN.
+* Fixed the settings link on the Plugins page.
 
 = 1.2.1 (2010-10-24) =
 * [Use only caption if title is identical](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=8#post-1748874)
@@ -64,7 +65,8 @@ No limits to the number of image sets per page or how many images are allowed in
 == Changelog ==
 
 = 1.2.2 (2011-04-14) =
-* Now uses WordPress bundled jQuery instead of forcing the Google CDN. Sorry about that.
+* Use WordPress bundled jQuery instead of forcing the Google CDN
+* Fixed the settings link on the Plugins page
 
 = 1.2.1 (2010-10-24) =
 * [Use only caption if title is identical](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=8#post-1748874)
@@ -86,7 +88,7 @@ No limits to the number of image sets per page or how many images are allowed in
 == Upgrade Notice ==
 
 = 1.2.2 =
-Uses WordPress bundled jQuery instead of forcing the Google CDN.
+Use WordPress bundled jQuery instead of forcing the Google CDN
 
 = 1.2.1 =
 Removed forgotten debug call. Important upgrade!

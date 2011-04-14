@@ -3,7 +3,7 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.2.1
+Version: 1.2.2
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
@@ -14,19 +14,19 @@ if(!defined('WP_PLUGIN_URL')){
 	define('WP_PLUGIN_URL', WP_CONTENT_URL.'/plugins');
 }
 define('JQLB_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
-define('JQLB_BASENAME', plugin_basename( __FILE__ ));
+define('JQLB_BASENAME', plugin_basename(__FILE__));
 define('JQLB_URL', WP_PLUGIN_URL.'/wp-jquery-lightbox/');
 define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
 define('JQLB_STYLE_URL', JQLB_URL.'lightbox.min.css');
+add_action('admin_init', 'jqlb_register_settings');
 add_action('admin_menu', 'jqlb_register_menu_item');
 add_action('wp_print_styles', 'jqlb_css');	
 add_action('wp_print_scripts', 'jqlb_js');
 add_filter('plugin_row_meta', 	'jqlb_set_plugin_meta', 2, 10);	
 add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
-add_filter('the_excerpt', 'jqlb_autoexpand_rel_wlightbox', 99);
 function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
 	if($file == JQLB_BASENAME) {
-		return array_merge($links, array(sprintf( '<a href="%s/wp-admin/options-general.php?page=%s">%s</a>', get_option('siteurl'), JQLB_BASENAME, __('Settings', 'wpdtree'))));
+		return array_merge($links, array(sprintf( '<a href="%s/wp-admin/options-general.php?page=%s">%s</a>', get_option('siteurl'), JQLB_BASENAME, __('Settings', 'jqlb'))));
 	}
 	return $links; 
 }
@@ -34,14 +34,17 @@ function jqlb_add_admin_footer(){ //shows some plugin info in the footer of the 
 	$plugin_data = get_plugin_data(__FILE__);
 	printf('%1$s by %2$s (who <a href="'.JQLB_DONATE_URL.'">appreciates books</a>) :)<br />', $plugin_data['Title'].' '.$plugin_data['Version'], $plugin_data['Author']);		
 }	
-function jqlb_register_menu_item() {	
+
+function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_automate'); 
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_on_demand');
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_speed', 'jqlb_pos_intval');
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
 	add_option('jqlb_resize_on_demand', 1); //default is to resize
 	add_option('jqlb_resize_speed', 250); 
-	add_options_page('jQuery Lightbox Options', 'jQuery Lightbox', 10, 'jquery-lightbox-options', 'jqlb_options_panel');
+}
+function jqlb_register_menu_item() {		
+	add_options_page('jQuery Lightbox Options', 'jQuery Lightbox', 8, 'jquery-lightbox-options', 'jqlb_options_panel');
 }
 function jqlb_css(){
 	if(is_admin() || is_feed()){return;}
@@ -49,14 +52,12 @@ function jqlb_css(){
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
-	wp_deregister_script('jquery');
-	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 	wp_enqueue_script('jquery', '', array(), '1.4.2', true);			
 	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.2', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed')
-		));
+	));
 }
 /* automatically insert rel="lightbox[nameofpost]" to every image with no manual work. 
 	if there are already rel="lightbox[something]" attributes, they are not clobbered. 

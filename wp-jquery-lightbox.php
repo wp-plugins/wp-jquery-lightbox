@@ -25,8 +25,11 @@ add_action('wp_print_scripts', 'jqlb_js');
 add_filter('plugin_row_meta', 	'jqlb_set_plugin_meta', 2, 10);	
 add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
 function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
-	if($file == JQLB_BASENAME) {
-		return array_merge($links, array(sprintf( '<a href="%s/wp-admin/options-general.php?page=%s">%s</a>', get_option('siteurl'), JQLB_BASENAME, __('Settings', 'jqlb'))));
+	static $this_plugin;
+	if(!$this_plugin) $this_plugin = plugin_basename(__FILE__);
+	if($file == $this_plugin) {
+		$settings_link = '<a href="options-general.php?page=jquery-lightbox-options">'.__('Settings', 'jqlb').'</a>';	
+		array_unshift($links, $settings_link);
 	}
 	return $links; 
 }
@@ -44,7 +47,7 @@ function jqlb_register_settings(){
 	add_option('jqlb_resize_speed', 250); 
 }
 function jqlb_register_menu_item() {		
-	add_options_page('jQuery Lightbox Options', 'jQuery Lightbox', 8, 'jquery-lightbox-options', 'jqlb_options_panel');
+	add_options_page('jQuery Lightbox Options', 'jQuery Lightbox', 'manage_options', 'jquery-lightbox-options', 'jqlb_options_panel');
 }
 function jqlb_css(){
 	if(is_admin() || is_feed()){return;}

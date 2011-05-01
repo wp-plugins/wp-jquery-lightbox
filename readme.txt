@@ -66,6 +66,15 @@ No limits to the number of image sets per page or how many images are allowed in
 
 == Changelog ==
 
+= 1.3 (2011-05-01) =
+* Improved scaling to make maximum use of display area.
+* Supports orientation / resize changes - Lightbox reflows with site. 
+* Added translation support (Thanks; [Martin S](http://sukimashita.com/) & Denis N. Voituk).
+* Added option to display download link.
+* Added support for disabling all animations (set duration to 0).
+* Fixed "duration" not having an effect.
+* Developers: added public method to Lightbox any content.
+
 = 1.2.2 (2011-04-14) =
 * Use WordPress bundled jQuery instead of forcing the Google CDN
 * Fixed the settings link on the Plugins page

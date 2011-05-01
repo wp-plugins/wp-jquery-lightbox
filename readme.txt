@@ -3,8 +3,8 @@ Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
-Tested up to: 3.1.1
-Stable tag: 1.2.2
+Tested up to: 3.1.2
+Stable tag: 1.3
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
 
@@ -13,26 +13,24 @@ A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of P
 This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com/projects/lightbox2/)-functionality, but sheds the bulk of the Prototype Framework **and** Scriptaculous Effects Library.
 
 Warren Krewenki [ported Lightbox over to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work. 
-It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions.
+It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
+
+It is also much better suited for mobile devices, with support for orientation changes, optimal use of screen estate and the option to disable all animation. 
 
 You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
 
-*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
+*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
 
-= 1.2.2 (2011-04-14) =
-* Use WordPress bundled jQuery instead of forcing the Google CDN.
-* Fixed the settings link on the Plugins page.
-
-= 1.2.1 (2010-10-24) =
-* [Use only caption if title is identical](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=8#post-1748874)
-* Removed a forgotten debug call
-
-= 1.2 (2010-10-12) = 
-* Added support for Media Library titles and captions.
-* Minified the javascript (8.6KB vs 17.8KB)
-* Minified the CSS (2.0KB vs 2.7KB)
+= 1.3 (2011-05-01) =
+* Improved scaling to make maximum use of display area.
+* Supports orientation / resize changes - Lightbox reflows with site. 
+* Added translation support (Thanks; [Martin S](http://sukimashita.com/) & Denis N. Voituk).
+* Added option to display download link.
+* Added support for disabling all animations (set duration to 0).
+* Fixed "duration" not having an effect.
+* Developers: added public method to Lightbox any content.
 
 [Older changelogs moved here.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/changelog/)
 
@@ -43,7 +41,7 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 1. Check out the jQuery Lightbox-panel in your admin interface for usage details and configuration.
 
 = How to Use: =
-1. You can use WordPress image galleries and have them grouped and auto-lightboxed: `[gallery link="file"]`	
+1. You can use WordPress image galleries and have them grouped and auto-lightboxed: [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
 1. You can add a `rel="lightbox"` attribute to any link tag to activate the lightbox. For example:
 
 	`<a href="image-1.jpg" rel="lightbox" title="my caption">image #1</a>`
@@ -61,6 +59,10 @@ Optional: Use the title attribute if you want to show a caption.
 You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!
+
+= For developers: =
+1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
 
 == Changelog ==
 
@@ -86,6 +88,9 @@ No limits to the number of image sets per page or how many images are allowed in
 * Release.
 
 == Upgrade Notice ==
+
+= 1.3 =
+Enables larger viewing area, improved mobile experience and translations.
 
 = 1.2.2 =
 Use WordPress bundled jQuery instead of forcing the Google CDN

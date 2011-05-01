@@ -19,7 +19,7 @@
 	background-repeat:no-repeat;				
 	background-position:center center;
 }	
-	
+
 #lightbox a img{ border: none; }
 
 #outerImageContainer{
@@ -77,6 +77,9 @@ padding-left: 20px;
 #prevLinkText{
 padding-right: 20px;
 }
+#downloadLink{
+margin-left: 10px;
+}	
 /*** END : next / previous text links ***/
 /*** START : added padding when navbar is on top ***/
 

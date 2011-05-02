@@ -22,7 +22,7 @@ function jqlb_init() {
 	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
 	define('JQLB_STYLE_URL', JQLB_URL.'lightbox.min.css');
 	define('JQLB_LANGUAGES_DIR', JQLB_PLUGIN_DIR . 'languages/');
-	load_plugin_textdomain('jqlb', false, JQLB_LANGUAGES_DIR);
+	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 	add_action('admin_init', 'jqlb_register_settings');
 	add_action('admin_menu', 'jqlb_register_menu_item');
 	add_action('wp_print_styles', 'jqlb_css');	

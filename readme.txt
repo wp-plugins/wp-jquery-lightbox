@@ -28,7 +28,7 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
 
 = 1.3.1 (2011-05-02) =
-* Forgot to include languages files, breaking the admin panel! :)
+* Forgot to include languages files! :)
 
 = 1.3 (2011-05-01) =
 * Improved scaling to *maximize* display area.
@@ -46,27 +46,24 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 1. Upload the `wp-jquery-lightbox`-folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Check out the jQuery Lightbox-panel in your admin interface for usage details and configuration.
-1. Note: [the gallery shortcode](http://codex.wordpress.org/Gallery_Shortcode) is *only* lightboxed if you set `[gallery link="file"]`
 
 = How to Use: =
-1. [WordPress built-in gallery](http://codex.wordpress.org/Gallery_Shortcode) can be auto-lightboxed thusly: [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
-1. Adding a `rel="lightbox"` attribute to any link tag also activate the lightbox. For example:
+1. With [WordPress built-in gallery](http://codex.wordpress.org/Gallery_Shortcode): [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
+1. By adding a `rel="lightbox"` attribute to any link:
 
 	`<a href="image-1.jpg" rel="lightbox" title="my caption">image #1</a>`
 
 	Note the use of title-attribute to set a caption
 		
-1. If you have a set of related images that you would like to group, follow step one but additionally include a group name in the rel attribute. For example:
+1. To group sets of related images, follow step 2 but additionally include a group name in the rel attribute:
 	
 	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
 	
 	`<a href="image-2.jpg" rel="lightbox[roadtrip]">image #2</a>`
 	
 	`<a href="image-3.jpg" rel="lightbox[roadtrip]">image #3</a>`
-
-	Post galleries are grouped in sets automatically.
-
-1. You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close. Clicking in the center of a picture also closes the lightbox.
+	
+1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 = For developers: =
 1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 

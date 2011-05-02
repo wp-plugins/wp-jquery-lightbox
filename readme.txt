@@ -6,31 +6,35 @@ Requires at least: 2.9.2
 Tested up to: 3.1.2
 Stable tag: 1.3
 
-A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous.
+A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
 == Description ==
 
 This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com/projects/lightbox2/)-functionality, but sheds the bulk of the Prototype Framework **and** Scriptaculous Effects Library.
 
-Warren Krewenki [ported Lightbox over to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work. 
-It provides an admin panel for configuration, (optional) auto-boxing of your image links and support for WordPress galleries, *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
+Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
 
-It is also much better suited for mobile devices, with support for orientation changes, optimal use of screen estate and the option to disable all animation. 
+This version is also better suited for mobile devices;
 
-You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
+* Improved scaling *maximizes* use of screen space
+* Live adjustment to the browser window and orientation of your phone
+* Animations can be disabled entirely
+* Optional download link to display images in native app.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
+
+You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
 
 = 1.3 (2011-05-01) =
-* Improved scaling to make maximum use of display area.
+* Improved scaling to *maximize* display area.
 * Supports orientation / resize changes - Lightbox reflows with site. 
 * Added translation support (Thanks; [Martin S](http://sukimashita.com/) & Denis N. Voituk).
 * Added option to display download link.
 * Added support for disabling all animations (set duration to 0).
 * Fixed "duration" not having an effect.
-* Developers: added public method to Lightbox any content.
+* [For Developers: public method to apply Lightbox to any string.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 
 [Older changelogs moved here.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/changelog/)
 
@@ -39,13 +43,16 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 1. Upload the `wp-jquery-lightbox`-folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Check out the jQuery Lightbox-panel in your admin interface for usage details and configuration.
+1. Note: [the gallery shortcode](http://codex.wordpress.org/Gallery_Shortcode) is *only* lightboxed if you set `[gallery link="file"]`
 
 = How to Use: =
-1. You can use WordPress image galleries and have them grouped and auto-lightboxed: [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
-1. You can add a `rel="lightbox"` attribute to any link tag to activate the lightbox. For example:
+1. [WordPress built-in gallery](http://codex.wordpress.org/Gallery_Shortcode) can be auto-lightboxed thusly: [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
+1. Adding a `rel="lightbox"` attribute to any link tag also activate the lightbox. For example:
 
 	`<a href="image-1.jpg" rel="lightbox" title="my caption">image #1</a>`
-	
+
+	Note the use of title-attribute to set a caption
+		
 1. If you have a set of related images that you would like to group, follow step one but additionally include a group name in the rel attribute. For example:
 	
 	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
@@ -54,11 +61,9 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 	
 	`<a href="image-3.jpg" rel="lightbox[roadtrip]">image #3</a>`
 
-Optional: Use the title attribute if you want to show a caption.
+	Post galleries are grouped in sets automatically.
 
-You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
-
-No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!
+1. You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close. Clicking in the center of a picture also closes the lightbox.
 
 = For developers: =
 1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
@@ -73,7 +78,7 @@ No limits to the number of image sets per page or how many images are allowed in
 * Added option to display download link.
 * Added support for disabling all animations (set duration to 0).
 * Fixed "duration" not having an effect.
-* Developers: added public method to Lightbox any content.
+* [For Developers: public method to apply Lightbox to any string.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 
 = 1.2.2 (2011-04-14) =
 * Use WordPress bundled jQuery instead of forcing the Google CDN
@@ -91,7 +96,7 @@ No limits to the number of image sets per page or how many images are allowed in
 = 1.1 (2010-10-09) = 
 * Honors empty captions. 
 * Fixed typos on admin page.
-* (thanks, josephknight! http://tinyurl.com/3677p6r)
+* [thanks, josephknight!](http://tinyurl.com/3677p6r)
 
 = 1.0 (2010-04-11) = 
 * Release.
@@ -118,12 +123,29 @@ First release.
 
 == Frequently Asked Questions ==
 
+= I can see elements of my site through the overlay = 
+
+It's a problem of [z-index](http://www.w3schools.com/Css/pr_pos_z-index.asp). Check [the z-index property](http://www.w3schools.com/Css/pr_pos_z-index.asp) for the problematic elements, and force them to be less than 100. (Thanks [dway](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=20#post-2052340)!)
+
+= How do I add images to a post? =
+
+[Inserting Images into Posts and Pages](http://codex.wordpress.org/Inserting_Images_into_Posts_and_Pages)
+
+= How do I create a thumbnail gallery? =
+
+Upload images to a post (see previous question) and use [WordPress' built-in gallery shortcode](http://codex.wordpress.org/Gallery_Shortcode): `[gallery link="file"]`
+
+Note the `link="file"` - this is crucial! By default the gallery will link your humbnails to a page displaying your image. With `link="file"` the thumbnails links 
+directly to the image files - allowing Lightbox to function.
+
 = Must fade-in and animation of all *box-scripts be so slow? =
 
-WP-jQuery Lightbox lets you configure the animation speed and disable image resizing from the admin panel.
+WP-jQuery Lightbox lets you configure the animation duration and disable image resizing from the admin panel. Set duration to 0 to disable animations entirely.
 
 = Can I help you in any way? =
 
-Absolutely! If you [download & install DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) on my refferal, I get 1GB (much needed!) extra space. DropBox is a cross-plattform application to sync your files online and across computers, and a 2GB account is *free*. Also - my refferal earns you a 250MB bonus! 
+Indeed you can! 
 
-If you've had any commercial applications for my plugins, please consider [sending me a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x). (used are fine!) 
+Translations and help with implementing them would be nice. A read through and comments on my WordPress API usage would also be most welcome, as I'm not really able to keep on top of the frequent WordPress releases anymore.
+
+And of course; [a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x) always brightens my day! (used ones are fine!) 

@@ -80,7 +80,7 @@ function jqlb_css(){
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
-	wp_enqueue_script('jquery', '', array(), '1.4.4', true);			
+	wp_enqueue_script('jquery', '', array(), false, true);			
 	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),

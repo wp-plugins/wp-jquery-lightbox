@@ -177,12 +177,20 @@ function jqlb_options_panel(){
 	<?php
 		$locale = jqlb_get_locale();
 		$diskfile = JQLB_LANGUAGES_DIR . "howtouse-" . $locale . ".html";
-		if (!file_exists($diskfile))
+		if (!file_exists($diskfile)){
 			$diskfile = JQLB_LANGUAGES_DIR . "howtouse.html";
-		if ( function_exists('file_get_contents') ) {
-			$text = file_get_contents($diskfile);
+		}
+		$text = false;
+		if(function_exists('file_get_contents')){
+			$text = @file_get_contents($diskfile);
 		} else {
-			$text = implode("", file($diskfile));
+			$text = @file($diskfile);
+			if($text !== false){
+				$text = implode("", $text);
+			}
+		}
+		if($text === false){
+			$text = '<p>The documentation files are missing! Try <a href="http://wordpress.org/extend/plugins/wp-jquery-lightbox/">downloading</a> and <a href="http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/">re-installing</a> this plugin.</p>';
 		}
 		echo $text;
 	?>

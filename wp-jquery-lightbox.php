@@ -3,7 +3,7 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.3
+Version: 1.3.1
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */

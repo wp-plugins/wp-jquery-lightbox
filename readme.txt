@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
 Tested up to: 3.1.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -26,6 +26,9 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
+
+= 1.3.1 (2011-05-02) =
+* Forgot to include languages files, breaking the admin panel! :)
 
 = 1.3 (2011-05-01) =
 * Improved scaling to *maximize* display area.
@@ -71,6 +74,9 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 
 == Changelog ==
 
+= 1.3.1 (2011-05-02) =
+* Forgot to include languages files! :)
+
 = 1.3 (2011-05-01) =
 * Improved scaling to make maximum use of display area.
 * Supports orientation / resize changes - Lightbox reflows with site. 
@@ -102,6 +108,9 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 * Release.
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+Added missing files from previous release... Also: mobile support, larger display area. 
 
 = 1.3 =
 Enables larger viewing area, improved mobile experience and translations.

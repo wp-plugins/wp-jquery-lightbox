@@ -3,7 +3,7 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.3.1
+Version: 1.3.2
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
@@ -29,7 +29,12 @@ function jqlb_init() {
 	add_action('wp_print_scripts', 'jqlb_js');
 	add_filter('plugin_row_meta', 	'jqlb_set_plugin_meta', 2, 10);	
 	add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
+	if(get_option('jqlb_comments') == 1){
+		remove_filter('pre_comment_content', 'wp_rel_nofollow');
+		add_filter('comment_text', 'jqlb_lightbox_comment', 99);
+	}
 }
+
 function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
 	static $this_plugin;
 	if(!$this_plugin) $this_plugin = plugin_basename(__FILE__);
@@ -45,11 +50,13 @@ function jqlb_add_admin_footer(){ //shows some plugin info in the footer of the 
 }	
 function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_automate', 'jqlb_bool_intval'); 
+	register_setting( 'jqlb-settings-group', 'jqlb_comments', 'jqlb_bool_intval'); 
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_on_demand', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_show_download', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_speed', 'jqlb_pos_intval');
 	//register_setting( 'jqlb-settings-group', 'jqlb_follow_scroll', 'jqlb_bool_intval');
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
+	add_option('jqlb_comments', 1);
 	add_option('jqlb_resize_on_demand', 1); //default is to resize
 	add_option('jqlb_show_download', 0); 
 	add_option('jqlb_resize_speed', 400); 
@@ -81,7 +88,7 @@ function jqlb_css(){
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
 	wp_enqueue_script('jquery', '', array(), false, true);			
-	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3', true);
+	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3.2', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
@@ -100,15 +107,24 @@ function jqlb_js() {
 	));
 }
 
+function jqlb_lightbox_comment($comment){
+	$comment = str_replace('rel=\'external nofollow\'','', $comment);
+	$comment = str_replace('rel=\'nofollow\'','', $comment);
+	$comment = str_replace('rel="external nofollow"','', $comment);
+	$comment = str_replace('rel="nofollow"','', $comment);
+	return jqlb_autoexpand_rel_wlightbox($comment);
+}
+
 function jqlb_autoexpand_rel_wlightbox($content) {
 	if(get_option('jqlb_automate') == 1){
 		global $post;	
-		$content = jqlb_do_regexp($content, $post->ID);
+		$id = ($post->ID) ? $post->ID : -1;
+		$content = jqlb_do_regexp($content, $id);
 	}			
 	return $content;
 }
 function jqlb_apply_lightbox($content, $id = -1){
-	if($id === -1){
+	if(!isset($id) || $id === -1){
 		$id = time().rand(0, 32768);
 	}
 	return jqlb_do_regexp($content, $id);
@@ -147,6 +163,13 @@ function jqlb_options_panel(){
 					<?php $check = get_option('jqlb_automate') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_automate" name="jqlb_automate" value="1" <?php echo $check; ?>/>
 					<label for="jqlb_automate" title="<?php _e('Let the plugin add necessary html to image links', 'jqlb') ?>"> <?php _e('Auto-lightbox image links', 'jqlb') ?></label>
+				</td>
+			</tr>
+			<tr valign="baseline">
+				<td>
+					<?php $check = get_option('jqlb_comments') ? ' checked="yes" ' : ''; ?>
+					<input type="checkbox" id="jqlb_comments" name="jqlb_comments" value="1" <?php echo $check; ?>/>
+					<label for="jqlb_comments" title="<?php _e('Disables the nofollow-attribute of comment links, that otherwise interfere with the lightbox.', 'jqlb') ?>"> <?php _e('Enable lightbox in comments (disables <a href="http://codex.wordpress.org/Nofollow">the nofollow attribute!</a>)', 'jqlb') ?></label>
 				</td>
 			</tr>
 			<tr valign="baseline">

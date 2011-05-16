@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
 Tested up to: 3.1.2
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -12,9 +12,9 @@ A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of P
 
 This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com/projects/lightbox2/)-functionality, but sheds the bulk of the Prototype Framework **and** Scriptaculous Effects Library.
 
-Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
+Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing localization support, an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
 
-This version is also better suited for mobile devices;
+This version is also adjusted for mobile devices;
 
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
@@ -27,8 +27,12 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
 
-= 1.3.1 (2011-05-02) =
-* Forgot to include languages files! :)
+= 1.3.2 (2011-05-16) =
+* Added support for auto-lightboxing comments too.
+* Added Russian and Czech translations (incl. images). Thanks again Denis!
+* Added Polish translation ([Thanks Fisiu](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-polish-localization?replies=1)).
+* Fixed fallbacks to avoid [breakage over JavaScript optimizers](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19#post-2091734).
+* Known issues: [1.3.x is garbage on IE7 and IE8](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues?replies=3). I've got no clue and no time - **help appreciated!**
 
 = 1.3 (2011-05-01) =
 * Improved scaling to *maximize* display area.
@@ -68,8 +72,20 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 = For developers: =
 1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
 1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
+1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+
+* If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+* If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+* [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 == Changelog ==
+
+= 1.3.2 (2011-05-16) =
+* Added support for auto-lightboxing comments too
+* Added Russian and Czech translations (incl. images). Thanks again Denis!
+* Added Polish translation ([thanks Fisiu](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-polish-localization?replies=1))
+* Fixed fallbacks to avoid [breakage over JavaScript optimizers](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19#post-2091734).
+* Known issues: [1.3.x is garbage on IE7 and IE8](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues?replies=3). I've got no clue and no time - **help appreciated!**
 
 = 1.3.1 (2011-05-02) =
 * Forgot to include languages files! :)
@@ -105,6 +121,9 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 * Release.
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+Support for auto-lightboxing comments. Added Polish, Russian and Czech languages.
 
 = 1.3.1 =
 Added missing files from previous release... Also: mobile support, larger display area. 

@@ -15,6 +15,13 @@
 	<ol> 
 	<li>Always have <code>wp_footer();</code> just before the closing &lt;/body&gt; tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files</li> 
 	<li>Apply lightbox to any content by running <code>jqlb_apply_lightbox($your_content, "any ID");</code> It returns a string with all image links lightboxed, grouped by "any id"</li> 
+	<li>Many JavaScript optimizers, combiners, minifiers, etc. conflict with <a href="http://codex.wordpress.org/Function_Reference/wp_localize_script2"><code>wp_localize_script()</code></a>, used to configure this plugin and many others.
+		<ul style="list-style-type: circle;margin-left: 24px;"> 
+		<li>If you experience problems with jQuery Lightbox, please disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)</li>
+		<li>If you develop JavaScript optimizers for WordPress, please play nice with the default API...</li>
+		<li><a href="http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19">More info about this issue</a></li>
+		</ul> 
+	</li>
 	</ol>	
 	<h2>Credits</h2><ul style="list-style-type: circle;margin-left: 24px;">
 	<li>wp-jquery-lightbox was created by <a href="http://www.ulfben.com">Ulf Benjaminsson</a> (who <a href="http://amzn.com/w/2QB6SQ5XX2U0N">appreciates books</a>). :)</li>		
@@ -23,6 +30,7 @@
 	<li><a href="http://github.com/krewenki/jquery-lightbox/">jQuery Lightbox</a> is based on <a href="http://www.huddletogether.com/projects/lightbox2/">Lightbox 2 by Lokesh Dhakar</a></li>		
 	<li>Translation support (and german language files) added by <a href="http://sukimashita.com/">Martin S</a></li>
 	<li>Translation for admin pages (and Russian and Czech languages) added by Denis N. Voituk</li>
+	<li>Polish localization <a href="http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-polish-localization?replies=1">by Fisiu</a></li>
 	</ul>
 	
 	<h2>Changes to Lightbox-script:</h2><p style="margin-left: 24px;">	

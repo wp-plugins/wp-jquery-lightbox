@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3 - 2011-05-01
+ * Version 1.3.2 - 2011-05-17
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -121,7 +121,7 @@
 	    function start(imageLink) {
 		    jQuery("select, embed, object").hide();
 		    var arrayPageSize = getPageSize();
-		    var overlay = jQuery("#overlay").hide().css({width: arrayPageSize[0]+"px", height: arrayPageSize[1]+'px', opacity : opts.overlayOpacity}).fadeIn(400);		
+		    jQuery("#overlay").hide().css({width: arrayPageSize[0]+"px", height: arrayPageSize[1]+'px', opacity : opts.overlayOpacity}).fadeIn(400);		
 			imageNum = 0;
 		    // if data is not provided by jsonData parameter
             if(!opts.jsonData) {
@@ -342,25 +342,24 @@
 			jQuery('#caption').html('').hide();			
 		    if(opts.imageArray[opts.activeImage][1]){
 			    jQuery('#caption').html(opts.imageArray[opts.activeImage][1]).show();
-		    }
-		    // if image is part of set display 'Image x of x'
-		    if(opts.imageArray.length > 1){
-			    var nav_html;
-			    nav_html = opts.strings.image + (opts.activeImage + 1) + opts.strings.of + opts.imageArray.length;
-				if (opts.displayDownloadLink) {
-					nav_html += '<a href="' + opts.imageArray[opts.activeImage][0] + '" id="downloadLink">' + opts.strings.download + '</a>';
-				}	
-			    if (!opts.disableNavbarLinks) {
-                    // display previous / next text links
-                    if ((opts.activeImage) > 0 || opts.loopImages) {
-                      nav_html = '<a title="' + opts.strings.prevLinkTitle + '" href="#" id="prevLinkText">' + opts.strings.prevLinkText + "</a>" + nav_html;
-                    }
-                    if (((opts.activeImage + 1) < opts.imageArray.length) || opts.loopImages) {
-                      nav_html += '<a title="' + opts.strings.nextLinkTitle + '" href="#" id="nextLinkText">' + opts.strings.nextLinkText + "</a>";
-                    }
-                }	
-				jQuery('#numberDisplay').html(nav_html).show();				
-		    }					
+		    }			
+		    var nav_html = '';
+			var prev = '';
+			var pos = (opts.imageArray.length > 1) ? opts.strings.image + (opts.activeImage + 1) + opts.strings.of + opts.imageArray.length : '';
+			var link = (opts.displayDownloadLink) ? '<a href="' + opts.imageArray[opts.activeImage][0] + '" id="downloadLink">' + opts.strings.download + '</a>' : '';
+			var next = '';
+			if(opts.imageArray.length > 1 && !opts.disableNavbarLinks){	 // display previous / next text links   			           
+				if((opts.activeImage) > 0 || opts.loopImages) {
+					prev = '<a title="' + opts.strings.prevLinkTitle + '" href="#" id="prevLinkText">' + opts.strings.prevLinkText + "</a>";
+				}
+				if(((opts.activeImage + 1) < opts.imageArray.length) || opts.loopImages) {
+					next += '<a title="' + opts.strings.nextLinkTitle + '" href="#" id="nextLinkText">' + opts.strings.nextLinkText + "</a>";
+				}							
+		    }	
+			nav_html = prev + nav_html + pos + link + next;				
+			if(nav_html != ''){
+				jQuery('#numberDisplay').html(nav_html).show();	
+			}
 			jQuery("#imageData").show();
 			updateNav();
 	    };
@@ -442,7 +441,6 @@
 		imageArray : new Array,
 		activeImage : null,
 		inprogress : false, //this is an internal state variable. don't touch.
-		resizeSpeed : 250,
 		widthCurrent: 250,
 		heightCurrent: 250,
 		xScale : 1,
@@ -450,39 +448,38 @@
 		displayTitle: true,
 		navbarOnTop: false,		
 		displayHelp: false,
-		displayDownloadLink: true,
-		strings : {
-			help: ' \u2190 / P - previous image\u00a0\u00a0\u00a0\u00a0\u2192 / N - next image\u00a0\u00a0\u00a0\u00a0ESC / X - close image gallery',
-			prevLinkTitle: 'previous image',
-			nextLinkTitle: 'next image',
-			prevLinkText:  '&laquo; Previous',
-			nextLinkText:  'Next &raquo;',
-			closeTitle: 'close image gallery',
-			image: 'Image ',
-			of: ' of ',
-			download: 'Download'
-		},
-		fitToScreen: true,		// resize images if they are bigger than window
         disableNavbarLinks: true,
         loopImages: true,
         imageClickClose: true,
         jsonData: null,
         jsonDataParser: null,
-		animate: true,
 		followScroll: false
-	};
-	
+	};	
 })(jQuery);
 
+/*
+Se till att all initiering sker på ett ställe och att JQLBSettings är optional
+Se till Download-länken läggs till även om bilden inte är i ett sett.
+*/
 jQuery(document).ready(function(){
 	if(typeof JQLBSettings == 'object' && JQLBSettings.resizeSpeed){JQLBSettings.resizeSpeed = parseInt(JQLBSettings.resizeSpeed);}
+	var default_strings = {
+		help: ' \u2190 / P - previous image\u00a0\u00a0\u00a0\u00a0\u2192 / N - next image\u00a0\u00a0\u00a0\u00a0ESC / X - close image gallery',
+		prevLinkTitle: 'previous image',
+		nextLinkTitle: 'next image',
+		prevLinkText:  '&laquo; Previous',
+		nextLinkText:  'Next &raquo;',
+		closeTitle: 'close image gallery',
+		image: 'Image ',
+		of: ' of ',
+		download: 'Bajs'
+	};
 	jQuery('a[rel^="lightbox"]').lightbox({
 		fitToScreen: (typeof JQLBSettings == 'object' && JQLBSettings.fitToScreen == '1') ? true : false,
-		resizeSpeed: (typeof JQLBSettings == 'object' && JQLBSettings.resizeSpeed >= 0) ? JQLBSettings.resizeSpeed : 250,
+		resizeSpeed: (typeof JQLBSettings == 'object' && JQLBSettings.resizeSpeed >= 0) ? JQLBSettings.resizeSpeed : 400,
 		animate: (typeof JQLBSettings == 'object' && JQLBSettings.resizeSpeed == 0) ? false : true,
 		displayDownloadLink: (typeof JQLBSettings == 'object' && JQLBSettings.displayDownloadLink == '0') ? false : true,
 		//followScroll: (typeof JQLBSettings == 'object' && JQLBSettings.followScroll == '0') ? false : true,
-		strings: JQLBSettings
-	});
-	
+		strings: (typeof JQLBSettings == 'object' && typeof JQLBSettings.help == 'string') ? JQLBSettings : default_strings
+	});	
 });

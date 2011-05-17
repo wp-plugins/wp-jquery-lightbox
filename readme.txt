@@ -14,7 +14,7 @@ This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com
 
 Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing localization support, an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
 
-This version is also adjusted for mobile devices;
+This version is also [adjusted for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
 
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone

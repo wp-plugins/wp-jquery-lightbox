@@ -146,6 +146,12 @@ Honors empty captions and fixes some typos.
 = 1.0 =
 First release.
 
+== Screenshots ==
+
+1. A post gallery on Android.
+2. Lightbox displayed in landscape mode. Image info and 'close' is always visible, download link is optional. Click left/right side of image to navigate the set.
+3. Lightbox, with device rotated. Image remains centered and as wide as possible.
+
 == Frequently Asked Questions ==
 
 = I can see elements of my site through the overlay = 

@@ -22,7 +22,7 @@ function jqlb_init() {
 	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
 	define('JQLB_STYLE_URL', JQLB_URL.'lightbox.min.css');
 	define('JQLB_LANGUAGES_DIR', JQLB_PLUGIN_DIR . 'languages/');
-	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
+	load_plugin_textdomain('jqlb', false, dirname(JQLB_BASENAME) . '/languages/');
 	add_action('admin_init', 'jqlb_register_settings');
 	add_action('admin_menu', 'jqlb_register_menu_item');
 	add_action('wp_print_styles', 'jqlb_css');	
@@ -37,7 +37,7 @@ function jqlb_init() {
 
 function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
 	static $this_plugin;
-	if(!$this_plugin) $this_plugin = plugin_basename(__FILE__);
+	if(!$this_plugin) $this_plugin = JQLB_BASENAME;
 	if($file == $this_plugin) {
 		$settings_link = '<a href="options-general.php?page=jquery-lightbox-options">'.__('Settings', 'jqlb').'</a>';	
 		array_unshift($links, $settings_link);

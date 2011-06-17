@@ -19,7 +19,7 @@ function jqlb_init() {
 	define('JQLB_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
 	define('JQLB_BASENAME', plugin_basename(__FILE__));
 	define('JQLB_URL', WP_PLUGIN_URL.'/wp-jquery-lightbox/');
-	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.js');
+	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
 	define('JQLB_STYLES_URL', JQLB_URL.'styles/');
 	define('JQLB_LANGUAGES_DIR', JQLB_PLUGIN_DIR . 'languages/');
 	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');

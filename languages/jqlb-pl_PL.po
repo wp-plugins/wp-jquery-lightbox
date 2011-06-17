@@ -1,0 +1,80 @@
+# Last-Translator: Mariusz Fik <fisiu@opensuse.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP JQuery Lightbox\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-02-20 15:12+0100\n"
+"PO-Revision-Date: 2011-05-12 01:44+0200\n"
+"Last-Translator: Mariusz Fik <fisiu@opensuse.org>\n"
+"Language-Team: opensuse\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Virtaal 0.6.1\n"
+"jquery-lightbox\n"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:44
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:80
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:81
+msgid "previous image"
+msgstr "poprzedni obraz"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:80
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:82
+msgid "next image"
+msgstr "następny obraz"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:80
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:85
+msgid "close image gallery"
+msgstr "zamknij galerię"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:83
+msgid "&laquo; Previous"
+msgstr "&laquo; Poprzedni"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:84
+msgid "Next &raquo;"
+msgstr "Następny &raquo;"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:86
+msgid "Image "
+msgstr "Obraz "
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:87
+msgid " of "
+msgstr " z "
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:107
+msgid "Cheatin&#8217; uh?"
+msgstr "Oszukujesz?"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:117
+msgid "Auto-lightbox image links"
+msgstr "Aktywuj automatycznie lightbox dla łącz z obrazami"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:121
+msgid "Let the plugin add necessary html to image links"
+msgstr "Pozwól wtyczce dodać niezbędny kod html do łącz z obrazami"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:125
+msgid "Shrink large images to fit smaller screens"
+msgstr "Przytnij duże obrazy dla mniejszych ekranów"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:129
+msgid "Note: <u>Excessively large images</u> waste bandwidth!"
+msgstr "Uwaga: <u>Nadmiernie duże obrazy</u> marnują transfer!"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:133
+msgid "Animation speed (in milliseconds)"
+msgstr "Szybkość animacji (w milisekundach)"
+
+#: C:\_work\svn\artprima\trunk\wp-content\plugins\wp-jquery-lightbox/wp-jquery-lightbox.php:140
+msgid "Save Changes"
+msgstr "Zapisz zmiany"

@@ -3,7 +3,7 @@ Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
-Tested up to: 3.1.2
+Tested up to: 3.1.3
 Stable tag: 1.3.2
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
@@ -18,14 +18,21 @@ This version is also [adjusted for mobile devices](http://wordpress.org/extend/p
 
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
-* Animations can be disabled entirely
 * Optional download link to display images in native app.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
 
-You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
+You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
+
+= 1.3.3 (2011-06-12) =
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
+* Added setting to have margins to screen edge.
+* Added setting to put info & navigation on top.
+* Added setting for help text.
+* Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
 
 = 1.3.2 (2011-05-16) =
 * Added support for auto-lightboxing comments too.
@@ -80,6 +87,14 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 
 == Changelog ==
 
+= 1.3.3 (2011-06-12) =
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
+* Added setting to have margins to screen edge.
+* Added setting to put info & navigation on top.
+* Added setting for help text.
+* Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
+
 = 1.3.2 (2011-05-16) =
 * Added support for auto-lightboxing comments too
 * Added Russian and Czech translations (incl. images). Thanks again Denis!
@@ -121,6 +136,9 @@ You can navigate the images with your keyboard: Arrows, P(revious)/N(ext) and X/
 * Release.
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+Fixes for Internet Explorer. Added Japanese translation.
 
 = 1.3.2 =
 Support for auto-lightboxing comments. Added Polish, Russian and Czech languages.

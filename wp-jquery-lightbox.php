@@ -3,14 +3,14 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.3.2
+Version: 1.3.3
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
 add_action( 'plugins_loaded', 'jqlb_init' );
 function jqlb_init() {
 	if(!defined('WP_CONTENT_URL')){
-		define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
+		define('WP_CONTENT_URL', site_url('/wp-content'));
 	}
 	if(!defined('WP_PLUGIN_URL')){
 		define('WP_PLUGIN_URL', WP_CONTENT_URL.'/plugins');
@@ -19,10 +19,10 @@ function jqlb_init() {
 	define('JQLB_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
 	define('JQLB_BASENAME', plugin_basename(__FILE__));
 	define('JQLB_URL', WP_PLUGIN_URL.'/wp-jquery-lightbox/');
-	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
-	define('JQLB_STYLE_URL', JQLB_URL.'lightbox.min.css');
+	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.js');
+	define('JQLB_STYLES_URL', JQLB_URL.'styles/');
 	define('JQLB_LANGUAGES_DIR', JQLB_PLUGIN_DIR . 'languages/');
-	load_plugin_textdomain('jqlb', false, dirname(JQLB_BASENAME) . '/languages/');
+	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 	add_action('admin_init', 'jqlb_register_settings');
 	add_action('admin_menu', 'jqlb_register_menu_item');
 	add_action('wp_print_styles', 'jqlb_css');	
@@ -37,7 +37,7 @@ function jqlb_init() {
 
 function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's settings page
 	static $this_plugin;
-	if(!$this_plugin) $this_plugin = JQLB_BASENAME;
+	if(!$this_plugin) $this_plugin = plugin_basename(__FILE__);
 	if($file == $this_plugin) {
 		$settings_link = '<a href="options-general.php?page=jquery-lightbox-options">'.__('Settings', 'jqlb').'</a>';	
 		array_unshift($links, $settings_link);
@@ -53,12 +53,20 @@ function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_comments', 'jqlb_bool_intval'); 
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_on_demand', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_show_download', 'jqlb_bool_intval');
+	register_setting( 'jqlb-settings-group', 'jqlb_navbarOnTop', 'jqlb_bool_intval');
+	register_setting( 'jqlb-settings-group', 'jqlb_margin_size', 'floatval');
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_speed', 'jqlb_pos_intval');
+	register_setting( 'jqlb-settings-group', 'jqlb_show_help', 'jqlb_bool_intval');
+	register_setting( 'jqlb-settings-group', 'jqlb_help_text');
+	
 	//register_setting( 'jqlb-settings-group', 'jqlb_follow_scroll', 'jqlb_bool_intval');
+	add_option('jqlb_show_help', 0);
+	add_option('jqlb_help_text', '');
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
 	add_option('jqlb_comments', 1);
-	add_option('jqlb_resize_on_demand', 1); //default is to resize
+	add_option('jqlb_resize_on_demand', 0); 
 	add_option('jqlb_show_download', 0); 
+	add_option('jqlb_navbarOnTop', 0);
 	add_option('jqlb_resize_speed', 400); 
 	//add_option('jqlb_follow_scroll', 0);  
 }
@@ -68,7 +76,7 @@ function jqlb_register_menu_item() {
 function jqlb_get_locale(){
 	//$lang_locales and ICL_LANGUAGE_CODE are defined in the WPML plugin (http://wpml.org/)
 	global $lang_locales;
-	if (isset($lang_locales[ICL_LANGUAGE_CODE])){
+	if (defined('ICL_LANGUAGE_CODE') && isset($lang_locales[ICL_LANGUAGE_CODE])){
 		$locale = $lang_locales[ICL_LANGUAGE_CODE];
 	} else {
 		$locale = get_locale();
@@ -78,11 +86,12 @@ function jqlb_get_locale(){
 function jqlb_css(){
 	if(is_admin() || is_feed()){return;}
 	$locale = jqlb_get_locale();
-	$cssfile = 'lightbox.min.' . $locale . '.css';
-	if(is_readable(JQLB_PLUGIN_DIR . $cssfile)){
-		wp_enqueue_style('jquery.lightbox.min.css', JQLB_URL . $cssfile, false, '1.3');
+	$cssfile = JQLB_STYLES_URL.'lightbox.min.' . $locale . '.css';
+	if(is_readable($cssfile)){
+		wp_enqueue_style('jquery.lightbox.min.css', $cssfile, false, '1.3');
 	}else{
-		wp_enqueue_style('jquery.lightbox.min.css', JQLB_STYLE_URL, false, '1.3');
+		$default = 'lightbox.min.css';
+		wp_enqueue_style('jquery.lightbox.min.css', JQLB_STYLES_URL.$default, false, '1.3');
 	}	
 }
 function jqlb_js() {			   	
@@ -93,9 +102,14 @@ function jqlb_js() {
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
 		'displayDownloadLink' => get_option('jqlb_show_download'),
+		'navbarOnTop' => get_option('jqlb_navbarOnTop'),
+		'loopImages' => get_option('jqlb_loopImages'),
+		'resizeCenter' => get_option('jqlb_resizeCenter'),
+		'marginSize' => get_option('jqlb_margin_size'),
+		'showHelp' => get_option('jqlb_show_help'),
 		//'followScroll' => get_option('jqlb_follow_scroll'),
 		/* translation */
-		'help' => __(' \u2190 / P - previous image\u00a0\u00a0\u00a0\u00a0\u2192 / N - next image\u00a0\u00a0\u00a0\u00a0ESC / X - close image gallery', 'jqlb'),
+		'help' => __(get_option('jqlb_help_text'), 'jqlb'),
 		'prevLinkTitle' => __('previous image', 'jqlb'),
 		'nextLinkTitle' => __('next image', 'jqlb'),
 		'prevLinkText' =>  __('&laquo; Previous', 'jqlb'),
@@ -158,41 +172,63 @@ function jqlb_options_panel(){
 	<form method="post" action="options.php">
 		<table>
 		<?php settings_fields('jqlb-settings-group'); ?>
-			<tr valign="baseline">
-				<td>
+			<tr valign="baseline" colspan="2">
+				<td colspan="2">
 					<?php $check = get_option('jqlb_automate') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_automate" name="jqlb_automate" value="1" <?php echo $check; ?>/>
 					<label for="jqlb_automate" title="<?php _e('Let the plugin add necessary html to image links', 'jqlb') ?>"> <?php _e('Auto-lightbox image links', 'jqlb') ?></label>
 				</td>
 			</tr>
-			<tr valign="baseline">
-				<td>
+			<tr valign="baseline" colspan="2">
+				<td colspan="2">
 					<?php $check = get_option('jqlb_comments') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_comments" name="jqlb_comments" value="1" <?php echo $check; ?>/>
 					<label for="jqlb_comments" title="<?php _e('Disables the nofollow-attribute of comment links, that otherwise interfere with the lightbox.', 'jqlb') ?>"> <?php _e('Enable lightbox in comments (disables <a href="http://codex.wordpress.org/Nofollow">the nofollow attribute!</a>)', 'jqlb') ?></label>
 				</td>
 			</tr>
-			<tr valign="baseline">
-				<td>
+			<tr valign="baseline" colspan="2">
+				<td colspan="2">
 					<?php $check = get_option('jqlb_show_download') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_show_download" name="jqlb_show_download" value="1" <?php echo $check; ?> />
 					<label for="jqlb_show_download"> <?php _e('Show download link', 'jqlb') ?> </label>
 				</td>
 			</tr>
-			<tr valign="baseline">
-				<td>
-					<?php $check = get_option('jqlb_resize_on_demand') ? ' checked="yes" ' : ''; ?>
-					<input type="checkbox" id="jqlb_resize_on_demand" name="jqlb_resize_on_demand" value="1" <?php echo $check; ?> />
-					<label for="jqlb_resize_on_demand"><?php _e('Shrink large images to fit smaller screens', 'jqlb') ?></label> 
-				</td>
-			</tr>					
-			<tr valign="baseline">
-				<td>					
-					<input type="text" id="jqlb_resize_speed" name="jqlb_resize_speed" value="<?php echo intval(get_option('jqlb_resize_speed')) ?>" />
-					<label for="jqlb_resize_speed"><?php _e('Animation duration (in milliseconds)', 'jqlb') ?></label>			
-				</td>
-			</tr>				
+      <tr valign="baseline" colspan="2">
+        <td colspan="2"> 
+          <?php $check = get_option('jqlb_navbarOnTop') ? ' checked="yes" ' : ''; ?>
+          <input type="checkbox" id="jqlb_navbarOnTop" name="jqlb_navbarOnTop" value="1" <?php echo $check; ?> />
+          <label for="jqlb_navbarOnTop">
+            <?php _e('Show Info Bar on Top', 'jqlb') ?>
+          </label>
+        </td>
+      </tr>
+      <tr valign="baseline" colspan="2">
+			<td>
+				<?php $check = get_option('jqlb_resize_on_demand') ? ' checked="yes" ' : ''; ?>
+				<input type="checkbox" id="jqlb_resize_on_demand" name="jqlb_resize_on_demand" value="1" <?php echo $check; ?> />
+				<label for="jqlb_resize_on_demand"><?php _e('Shrink large images to fit smaller screens', 'jqlb') ?></label> 
+			</td>
+			<?php IF($check != ''): ?>
+			<td>					
+				<input type="text" id="jqlb_margin_size" name="jqlb_margin_size" value="<?php echo floatval(get_option('jqlb_margin_size')) ?>" size="3" />
+				<label for="jqlb_margin_size"><?php _e('Minimum margin to screen edge (default: 0)', 'jqlb') ?></label>			
+			</td>
+			<?php ENDIF; ?>
+		</tr>					
+		<tr valign="baseline" colspan="2">
+			<td colspan="2">					
+				<input type="text" id="jqlb_resize_speed" name="jqlb_resize_speed" value="<?php echo intval(get_option('jqlb_resize_speed')) ?>" size="3" />
+				<label for="jqlb_resize_speed"><?php _e('Animation duration (in milliseconds) ', 'jqlb') ?></label>			
+			</td>
+		</tr>
+		<tr valign="baseline" colspan="2">			
+			<td>
+				<input type="text" id="jqlb_help_text" name="jqlb_help_text" value="<?php echo get_option('jqlb_help_text'); ?>" size="30" />		
+				<label for="jqlb_help_text"><?php _e('Help text (default: none) ', 'jqlb') ?></label>						
+			</td>			
+		</tr>			
 		 </table>
+		<p style="font-size:xx-small;font-style:italic;">Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.</p>
 		<p class="submit">
 		  <input type="submit" name="Submit" value="<?php _e('Save Changes', 'jqlb') ?>" />
 		</p>

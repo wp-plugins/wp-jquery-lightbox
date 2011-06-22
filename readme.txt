@@ -30,6 +30,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 * Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
 * Added setting for margins to screen edge.
+* Added setting for target attribute of download link
 * Added setting to put info & navigation on top.
 * Added setting for help text.
 * Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
@@ -91,6 +92,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 * Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
 * Added setting to have margins to screen edge.
+* Added setting for target attribute of download link
 * Added setting to put info & navigation on top.
 * Added setting for help text.
 * Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).

@@ -343,7 +343,7 @@
             var nav_html = '';
             var prev = '';
             var pos = (opts.imageArray.length > 1) ? opts.strings.image + (opts.activeImage + 1) + opts.strings.of + opts.imageArray.length : '';
-            var link = (opts.displayDownloadLink) ? '<a href="' + opts.imageArray[opts.activeImage][0] + '" id="downloadLink">' + opts.strings.download + '</a>' : '';
+            var link = (opts.displayDownloadLink) ? '<a href="' + opts.imageArray[opts.activeImage][0] + '" id="downloadLink" target="'+opts.linkTarget+'">' + opts.strings.download + '</a>' : '';
             var next = '';
             if (opts.imageArray.length > 1 && !opts.disableNavbarLinks) {	 // display previous / next text links   			           
                 if ((opts.activeImage) > 0 || opts.loopImages) {
@@ -475,7 +475,8 @@
 			of: ' of ',
 			download: 'Download'
 		};
-		$('a[rel^="lightbox"]').lightbox({	
+		$('a[rel^="lightbox"]').lightbox({
+			linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
 			displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
 			marginSize: (haveConf && JQLBSettings.marginSize) ? JQLBSettings.marginSize : 0,
 			fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,

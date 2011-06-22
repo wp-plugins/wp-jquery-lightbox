@@ -56,12 +56,12 @@ function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_navbarOnTop', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_margin_size', 'floatval');
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_speed', 'jqlb_pos_intval');
-	register_setting( 'jqlb-settings-group', 'jqlb_show_help', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_help_text');
+	register_setting( 'jqlb-settings-group', 'jqlb_link_target');
 	
 	//register_setting( 'jqlb-settings-group', 'jqlb_follow_scroll', 'jqlb_bool_intval');
-	add_option('jqlb_show_help', 0);
 	add_option('jqlb_help_text', '');
+	add_option('jqlb_link_target', '_self');
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
 	add_option('jqlb_comments', 1);
 	add_option('jqlb_resize_on_demand', 0); 
@@ -106,7 +106,7 @@ function jqlb_js() {
 		'loopImages' => get_option('jqlb_loopImages'),
 		'resizeCenter' => get_option('jqlb_resizeCenter'),
 		'marginSize' => get_option('jqlb_margin_size'),
-		'showHelp' => get_option('jqlb_show_help'),
+		'linkTarget' => get_option('jqlb_link_target'),
 		//'followScroll' => get_option('jqlb_follow_scroll'),
 		/* translation */
 		'help' => __(get_option('jqlb_help_text'), 'jqlb'),
@@ -187,10 +187,23 @@ function jqlb_options_panel(){
 				</td>
 			</tr>
 			<tr valign="baseline" colspan="2">
-				<td colspan="2">
+				<td>
 					<?php $check = get_option('jqlb_show_download') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_show_download" name="jqlb_show_download" value="1" <?php echo $check; ?> />
 					<label for="jqlb_show_download"> <?php _e('Show download link', 'jqlb') ?> </label>
+				</td>
+				<td>
+				<?php $target = get_option('jqlb_link_target'); ?>
+				<label for="jqlb_link_target" title="<?php _e('_blank: open the image in a new window or tab
+_self: open the image in the same frame as it was clicked (default)
+_parent: open the image in the parent frameset
+_top: open the image in the full body of the window', 'jqlb') ?>"><?php _e('Target for download link:', 'jqlb'); ?></label> 
+				<select id="jqlb_link_target" name="jqlb_link_target">
+					<option <?php if ('_blank' == $target)echo 'selected="selected"'; ?>>_blank</option>
+					<option <?php if ('_self' == $target)echo 'selected="selected"'; ?>>_self</option>
+					<option <?php if ('_top' == $target)echo 'selected="selected"'; ?>>_top</option>
+					<option <?php if ('_parent' == $target)echo 'selected="selected"'; ?>>_parent</option>
+				</select>							
 				</td>
 			</tr>
       <tr valign="baseline" colspan="2">

@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 2.9.2
 Tested up to: 3.1.3
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -14,7 +14,7 @@ This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com
 
 Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing localization support, an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
 
-This version is also [adjusted for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
+This version is also [great for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
 
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
@@ -27,9 +27,9 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
 
 = 1.3.3 (2011-06-12) =
-* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
-* Added setting to have margins to screen edge.
+* Added setting for margins to screen edge.
 * Added setting to put info & navigation on top.
 * Added setting for help text.
 * Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
@@ -88,7 +88,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 == Changelog ==
 
 = 1.3.3 (2011-06-12) =
-* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
 * Added setting to have margins to screen edge.
 * Added setting to put info & navigation on top.
@@ -138,7 +138,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 == Upgrade Notice ==
 
 = 1.3.3 =
-Fixes for Internet Explorer. Added Japanese translation.
+Fixes for Internet Explorer? Support mixed HTTP/HTTPS. Added Japanese translation.
 
 = 1.3.2 =
 Support for auto-lightboxing comments. Added Polish, Russian and Czech languages.

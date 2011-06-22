@@ -97,7 +97,7 @@ function jqlb_css(){
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
 	wp_enqueue_script('jquery', '', array(), false, true);			
-	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3.2', true);
+	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3.3', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
@@ -183,7 +183,7 @@ function jqlb_options_panel(){
 				<td colspan="2">
 					<?php $check = get_option('jqlb_comments') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_comments" name="jqlb_comments" value="1" <?php echo $check; ?>/>
-					<label for="jqlb_comments" title="<?php _e('Disables the nofollow-attribute of comment links, that otherwise interfere with the lightbox.', 'jqlb') ?>"> <?php _e('Enable lightbox in comments (disables <a href="http://codex.wordpress.org/Nofollow">the nofollow attribute!</a>)', 'jqlb') ?></label>
+					<label for="jqlb_comments" title="<?php _e('Note: this will disable the nofollow-attribute of comment links, that otherwise interfere with the lightbox.', 'jqlb') ?>"> <?php _e('Enable lightbox in comments (disables <a href="http://codex.wordpress.org/Nofollow">the nofollow attribute!</a>)', 'jqlb') ?></label>
 				</td>
 			</tr>
 			<tr valign="baseline" colspan="2">
@@ -198,7 +198,7 @@ function jqlb_options_panel(){
           <?php $check = get_option('jqlb_navbarOnTop') ? ' checked="yes" ' : ''; ?>
           <input type="checkbox" id="jqlb_navbarOnTop" name="jqlb_navbarOnTop" value="1" <?php echo $check; ?> />
           <label for="jqlb_navbarOnTop">
-            <?php _e('Show Info Bar on Top', 'jqlb') ?>
+            <?php _e('Show image info on top', 'jqlb') ?>
           </label>
         </td>
       </tr>
@@ -211,7 +211,7 @@ function jqlb_options_panel(){
 			<?php IF($check != ''): ?>
 			<td>					
 				<input type="text" id="jqlb_margin_size" name="jqlb_margin_size" value="<?php echo floatval(get_option('jqlb_margin_size')) ?>" size="3" />
-				<label for="jqlb_margin_size"><?php _e('Minimum margin to screen edge (default: 0)', 'jqlb') ?></label>			
+				<label for="jqlb_margin_size" title="<?php _e('Keep a distance between the image and the screen edges.', 'jqlb') ?>"><?php _e('Minimum margin to screen edge (default: 0)', 'jqlb') ?></label>			
 			</td>
 			<?php ENDIF; ?>
 		</tr>					
@@ -224,11 +224,11 @@ function jqlb_options_panel(){
 		<tr valign="baseline" colspan="2">			
 			<td>
 				<input type="text" id="jqlb_help_text" name="jqlb_help_text" value="<?php echo get_option('jqlb_help_text'); ?>" size="30" />		
-				<label for="jqlb_help_text"><?php _e('Help text (default: none) ', 'jqlb') ?></label>						
+				<label for="jqlb_help_text"><?php _e('Help text (default: none) ', 'jqlb'); ?></label>						
 			</td>			
 		</tr>			
 		 </table>
-		<p style="font-size:xx-small;font-style:italic;">Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.</p>
+		<p style="font-size:xx-small;font-style:italic;"><?php _e('Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.', 'jqlb'); ?></p>
 		<p class="submit">
 		  <input type="submit" name="Submit" value="<?php _e('Save Changes', 'jqlb') ?>" />
 		</p>

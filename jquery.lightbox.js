@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3.3 - 2011-06-12
+ * Version 1.3.3 - 2011-06-21
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -44,7 +44,7 @@
         });
         function initialize() {
             $(window).bind('orientationchange', resizeListener);
-            $(window).resize(resizeListener);
+            $(window).bind('resize', resizeListener);
             // if (opts.followScroll) { $(window).bind('scroll', orientListener); }
             $('#overlay').remove();
             $('#lightbox').remove();
@@ -96,6 +96,8 @@
             if (opts.isIE8 && pgDocHeight > 4096) {
                 pgDocHeight = 4096;
             }
+			//$(window).width()   returns width of browser viewport
+			//$(document).width() returns width of HTML document
             return new Array($(document).width(), pgDocHeight, $(window).width(), $(window).height(), $(document).height());
         };
         //code for IE8 check provided by http://kangax.github.com/cft/
@@ -131,7 +133,7 @@
             var arrayPageSize = getPageSize();
             var arrayPagePos = getPageScroll();
             var newTop = 0;
-            $("#overlay").hide().css({width: '100%', height: arrayPageSize[1] + 'px', opacity: opts.overlayOpacity}).fadeIn(400);
+            $("#overlay").hide().css({width: arrayPageSize[0] + 'px', height: arrayPageSize[1] + 'px', opacity: opts.overlayOpacity}).fadeIn(400);
             if (opts.isIE8 && arrayPageSize[1] == 4096) {
                 if (arrayPagePos[1] >= 1000) {
                     newTop = arrayPagePos[1] - 1000;
@@ -248,8 +250,9 @@
             }
             var newWidth = opts.imgPreloader.width;
             var newHeight = opts.imgPreloader.height;
-            var arrayPageSize = getPageSize();       
-            $("#overlay").css({ width: '100%', height: arrayPageSize[1] + 'px' });  
+            var arrayPageSize = getPageSize();  
+			var noScrollWidth = (arrayPageSize[2] < arrayPageSize[0]) ? arrayPageSize[0] : arrayPageSize[2]; //if viewport is smaller than page, use page width.
+			$("#overlay").css({ width: noScrollWidth + 'px', height: arrayPageSize[1] + 'px' });  
             var maxHeight = (arrayPageSize[3]) - ($("#imageDataContainer").height() + (2 * opts.borderSize));
             var maxWidth = (arrayPageSize[2]) - (2*opts.borderSize);			
 			if (opts.fitToScreen){

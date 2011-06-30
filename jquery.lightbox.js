@@ -184,14 +184,16 @@
                                 title = caption; //to keep linked captions
                                 caption = ''; //but not duplicate the text								
                             }
-                            var s = '';
-                            if (title != '' && caption != '') {
-                                s = title + '<br />' + caption;
-                            } else if (title != '') {
-                                s = title;
-                            } else if (caption != '') {
-                                s = caption;
-                            }
+							var s = '';
+							if (title != '') {
+								s = '<span id="titleText">' + title + '</span>';
+							} 
+							if (caption != '') {
+								if (title != ''){
+									s += '<br />';
+								} 
+								s += '<span id="captionText">' + caption +'</span>';
+							}
                             opts.imageArray.push(new Array(this.href, opts.displayTitle ? s : ''));
                         }
                     });

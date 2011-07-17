@@ -83,16 +83,15 @@ function jqlb_get_locale(){
 	}
 	return $locale;
 }
-function jqlb_css(){
+function jqlb_css(){	
 	if(is_admin() || is_feed()){return;}
 	$locale = jqlb_get_locale();
-	$cssfile = JQLB_STYLES_URL.'lightbox.min.' . $locale . '.css';
-	if(is_readable($cssfile)){
-		wp_enqueue_style('jquery.lightbox.min.css', $cssfile, false, '1.3');
-	}else{
-		$default = 'lightbox.min.css';
-		wp_enqueue_style('jquery.lightbox.min.css', JQLB_STYLES_URL.$default, false, '1.3');
-	}	
+	$fileName = "lightbox.min.$locale.css";	
+	$path = JQLB_PLUGIN_DIR . "/styles/{$fileName}";
+	if(!is_readable($path)){
+		$fileName = 'lightbox.min.css';
+	}
+	wp_enqueue_style('jquery.lightbox.min.css', JQLB_STYLES_URL . $fileName, false, '1.3');	
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}

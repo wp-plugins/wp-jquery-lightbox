@@ -174,6 +174,14 @@ First release.
 
 == Frequently Asked Questions ==
 
+= Settings have no effect / lightbox isn't working =
+
+Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+
+* If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+* If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+* [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19) 
+
 = I can see elements of my site through the overlay = 
 
 It's a problem of [z-index](http://www.w3schools.com/Css/pr_pos_z-index.asp). Check [the z-index property](http://www.w3schools.com/Css/pr_pos_z-index.asp) for the problematic elements, and force them to be less than 100. (Thanks [dway](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=20#post-2052340)!)

@@ -2,9 +2,9 @@
 Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
-Requires at least: 2.9.2
-Tested up to: 3.1.3
-Stable tag: 1.3.3
+Requires at least: 3.0
+Tested up to: 3.3
+Stable tag: 1.3.4
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -14,7 +14,7 @@ This plugin lets you keep [the awesome Lightbox 2](http://www.huddletogether.com
 
 Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lightbox/) and this plugin is mostly a wrapper to his work: providing localization support, an admin panel for configuration, (optional) auto-boxing of your image links and support for [WordPress galleries](http://codex.wordpress.org/Gallery_Shortcode), *including* [media library](http://codex.wordpress.org/Media_Library_SubPanel) titles and captions. 
 
-This version is also [great for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
+This version is also [adjusted for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
 
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
@@ -24,13 +24,25 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 
 You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
-*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) please consider [sending me a book](http://amzn.com/w/2QB6SQ5XX2U0N)!*
+If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
+
+*[//ulfben](http://profiles.wordpress.org/users/ulfben/)*
+
+= 1.3.4 (2011-12-29) =
+* Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)
+* [Support for query params in image links](http://wordpress.org/support/topic/automatic-lightbox-functionarity-failes-to-work-with-image-links?replies=2#post-2302997)
+* [Fixed button messup in Firefox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-broken-in-firefox?replies=9)
+* Fixed depth fight with the default twentyeleven theme header
+* [Fixed admin bar covering the lightbox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-show-download-link-not-working?replies=4#post-2400784)
+* Added info on how to disable lightbox for specific links (bogus rel-attribute)
+* Added translations: [Romanian](http://wordpress.org/support/topic/wp-jquery-lightbox-romanian-translation?replies=1), [French](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-french-translation?replies=2#post-2187626) and [Hebrew](www.sagive.co.il)
+* Updated: Russian language icons (thanks; Ilya Gorenburg), [Japanese translation](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation-for-133?replies=1)
+
 
 = 1.3.3 (2011-06-12) =
-* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
-* Added setting for margins to screen edge.
-* Added setting for target attribute of download link
+* Added setting to have margins to screen edge.
 * Added setting to put info & navigation on top.
 * Added setting for help text.
 * Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
@@ -74,6 +86,8 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 	`<a href="image-2.jpg" rel="lightbox[roadtrip]">image #2</a>`
 	
 	`<a href="image-3.jpg" rel="lightbox[roadtrip]">image #3</a>`
+
+1. To *disable* lightboxing of an image link, just set any other rel-attribute: `rel="nobox"`
 	
 1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
@@ -88,11 +102,20 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 
 == Changelog ==
 
+= 1.3.4 (2011-12-29) =
+* Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)
+* [Support for query params in image links](http://wordpress.org/support/topic/automatic-lightbox-functionarity-failes-to-work-with-image-links?replies=2#post-2302997)
+* [Fixed button messup in Firefox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-broken-in-firefox?replies=9)
+* Fixed depth fight with the default twentyeleven theme header
+* [Fixed admin bar covering the lightbox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-show-download-link-not-working?replies=4#post-2400784)
+* Added info on how to disable lightbox for specific links (bogus rel-attribute)
+* Added translations: [Romanian](http://wordpress.org/support/topic/wp-jquery-lightbox-romanian-translation?replies=1), [French](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-french-translation?replies=2#post-2187626) and [Hebrew](www.sagive.co.il)
+* Updated: Russian language icons (thanks; Ilya Gorenburg), [Japanese translation](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation-for-133?replies=1)
+
 = 1.3.3 (2011-06-12) =
-* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues)? (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
+* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
 * Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
 * Added setting to have margins to screen edge.
-* Added setting for target attribute of download link
 * Added setting to put info & navigation on top.
 * Added setting for help text.
 * Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
@@ -140,7 +163,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 == Upgrade Notice ==
 
 = 1.3.3 =
-Fixes for Internet Explorer? Support mixed HTTP/HTTPS. Added Japanese translation.
+Fixes for Internet Explorer. Added Japanese translation.
 
 = 1.3.2 =
 Support for auto-lightboxing comments. Added Polish, Russian and Czech languages.
@@ -173,14 +196,6 @@ First release.
 3. Lightbox, with device rotated. Image remains centered and as wide as possible.
 
 == Frequently Asked Questions ==
-
-= Settings have no effect / lightbox isn't working =
-
-Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
-
-* If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
-* If you develop JavaScript optimizers for WordPress, please play nice with the default API...
-* [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19) 
 
 = I can see elements of my site through the overlay = 
 

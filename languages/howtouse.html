@@ -6,10 +6,11 @@
 	<em>Optional:</em> Use the <code>title</code> attribute if you want to show a caption.
 	</li> 
 	<li>If you have a set of related images that you would like to group, simply include a group name in the rel attribute. For example:
-<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #1&lt;/a&gt;
+	<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #1&lt;/a&gt;
 	&lt;a href=&quot;images/image-2.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #2&lt;/a&gt;
 	&lt;a href=&quot;images/image-3.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #3&lt;/a&gt;</code></pre> 
-	No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!</li> 	
+	No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!</li> 
+	<li>To <strong>disable</strong> lightboxing of an image link, just set any other rel-attribute: <code>rel="nobox"</code></li>
 	</ol>	
 	<h2>For	developers:</h2> 	
 	<ol> 
@@ -34,7 +35,8 @@
 	<li>Japanese localization <a href="http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation?replies=3">by redcocker</a></li>
 	</ul>
 	
-	<h2>Changes to Lightbox-script:</h2><p style="margin-left: 24px;">	
+	<h2>Changes to Lightbox-script:</h2><p style="margin-left: 24px;">
+	Takes the WordPress admin bar into consideration.<br />	
 	Resizing code manages <strong>both</strong> height and width and never destroy aspect ratio.<br />
 	Scaling routines now maximize images fully while taking captions into account.<br />
 	Added support for browser resizing and orientation changes - allowing images to <em>remain</em> optimally scaled and centered.<br />

@@ -3,26 +3,21 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.3.3
+Version: 1.3.4
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
 add_action( 'plugins_loaded', 'jqlb_init' );
 function jqlb_init() {
-	if(!defined('WP_CONTENT_URL')){
-		define('WP_CONTENT_URL', site_url('/wp-content'));
+	if(!defined('ULFBEN_DONATE_URL')){
+		define('ULFBEN_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
 	}
-	if(!defined('WP_PLUGIN_URL')){
-		define('WP_PLUGIN_URL', WP_CONTENT_URL.'/plugins');
-	}
-	define('JQLB_PLUGIN_DIR', dirname( __FILE__ ) . '/');
-	define('JQLB_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
-	define('JQLB_BASENAME', plugin_basename(__FILE__));
-	define('JQLB_URL', WP_PLUGIN_URL.'/wp-jquery-lightbox/');
-	define('JQLB_SCRIPT_URL', JQLB_URL.'jquery.lightbox.min.js');
-	define('JQLB_STYLES_URL', JQLB_URL.'styles/');
-	define('JQLB_LANGUAGES_DIR', JQLB_PLUGIN_DIR . 'languages/');
-	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
+	//JQLB_PLUGIN_DIR == plugin_dir_path(__FILE__); 
+	//JQLB_URL = plugin_dir_url(__FILE__);
+	//JQLB_STYLES_URL = plugin_dir_url(__FILE__).'styles/'
+	//JQLB_LANGUAGES_DIR = plugin_dir_path(__FILE__) . 'languages/'
+	define('JQLB_SCRIPT', 'jquery.lightbox.min.js');		
+	load_plugin_textdomain('jqlb', false, plugin_dir_path(__FILE__).'languages/');
 	add_action('admin_init', 'jqlb_register_settings');
 	add_action('admin_menu', 'jqlb_register_menu_item');
 	add_action('wp_print_styles', 'jqlb_css');	
@@ -46,7 +41,7 @@ function jqlb_set_plugin_meta( $links, $file ) { // Add a link to this plugin's 
 }
 function jqlb_add_admin_footer(){ //shows some plugin info in the footer of the config screen.
 	$plugin_data = get_plugin_data(__FILE__);
-	printf('%1$s by %2$s (who <a href="'.JQLB_DONATE_URL.'">appreciates books</a>) :)<br />', $plugin_data['Title'].' '.$plugin_data['Version'], $plugin_data['Author']);		
+	printf('%1$s by %2$s (who <a href="'.ULFBEN_DONATE_URL.'">appreciates books</a>) :)<br />', $plugin_data['Title'].' '.$plugin_data['Version'], $plugin_data['Author']);		
 }	
 function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_automate', 'jqlb_bool_intval'); 
@@ -86,17 +81,17 @@ function jqlb_get_locale(){
 function jqlb_css(){	
 	if(is_admin() || is_feed()){return;}
 	$locale = jqlb_get_locale();
-	$fileName = "lightbox.min.$locale.css";	
-	$path = JQLB_PLUGIN_DIR . "/styles/{$fileName}";
+	$fileName = "lightbox.min.{$locale}.css";	
+	$path = plugin_dir_path(__FILE__)."styles/{$fileName}";
 	if(!is_readable($path)){
-		$fileName = 'lightbox.min.css';
+		$fileName = 'lightbox.css';
 	}
-	wp_enqueue_style('jquery.lightbox.min.css', JQLB_STYLES_URL . $fileName, false, '1.3');	
+	wp_enqueue_style('jquery.lightbox.min.css', plugin_dir_url(__FILE__).'styles/'.$fileName, false, '1.3.4');	
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
 	wp_enqueue_script('jquery', '', array(), false, true);			
-	wp_enqueue_script('wp-jquery-lightbox', JQLB_SCRIPT_URL,  Array('jquery'), '1.3.3', true);
+	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__ ),  Array('jquery'), '1.3.4', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
@@ -148,7 +143,7 @@ function jqlb_apply_lightbox($content, $id = -1){
 	Michael Tyson, you are a regular expressions god! - http://atastypixel.com */
 function jqlb_do_regexp($content, $id){
 	$id = esc_attr($id);
-	$pattern = "/(<a(?![^>]*?rel=['\"]lightbox.*)[^>]*?href=['\"][^'\"]+?\.(?:bmp|gif|jpg|jpeg|png)['\"][^\>]*)>/i";
+	$pattern = "/(<a(?![^>]*?rel=['\"]lightbox.*)[^>]*?href=['\"][^'\"]+?\.(?:bmp|gif|jpg|jpeg|png)\?{0,1}\S{0,}['\"][^\>]*)>/i";
 	$replacement = '$1 rel="lightbox['.$id.']">';
 	return preg_replace($pattern, $replacement, $content);
 }
@@ -165,14 +160,16 @@ function jqlb_options_panel(){
 			die(__('Cheatin&#8217; uh?', 'jqlb'));
 	} 
 	add_action('in_admin_footer', 'jqlb_add_admin_footer');
-	?> 
+	?>
+	
 	<div class="wrap">
-	<h2>jQuery Lightbox</h2>
+	<h2>jQuery Lightbox</h2>	
+	<?php include_once(plugin_dir_path(__FILE__).'about.php'); ?>
 	<form method="post" action="options.php">
 		<table>
 		<?php settings_fields('jqlb-settings-group'); ?>
 			<tr valign="baseline" colspan="2">
-				<td colspan="2">
+				<td colspan="">
 					<?php $check = get_option('jqlb_automate') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_automate" name="jqlb_automate" value="1" <?php echo $check; ?>/>
 					<label for="jqlb_automate" title="<?php _e('Let the plugin add necessary html to image links', 'jqlb') ?>"> <?php _e('Auto-lightbox image links', 'jqlb') ?></label>
@@ -247,9 +244,9 @@ _top: open the image in the full body of the window', 'jqlb') ?>"><?php _e('Targ
 	</form>
 	<?php
 		$locale = jqlb_get_locale();
-		$diskfile = JQLB_LANGUAGES_DIR . "howtouse-" . $locale . ".html";
+		$diskfile = plugin_dir_path(__FILE__)."languages/howtouse-{$locale}.html";
 		if (!file_exists($diskfile)){
-			$diskfile = JQLB_LANGUAGES_DIR . "howtouse.html";
+			$diskfile = plugin_dir_path(__FILE__).'languages/howtouse.html';
 		}
 		$text = false;
 		if(function_exists('file_get_contents')){

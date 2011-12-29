@@ -1,11 +1,12 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3.3 - 2011-06-21
+ * Version 1.3.4 - 2011-12-29
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
  * plugin (http://wordpress.org/extend/plugins/wp-jquery-lightbox/)
  *  Modifications include:
+ *	. added "support" for WordPress admin bar.
  *	. improved the resizing code to respect aspect ratio
  *	. improved scaling routines to maximize images while taking captions into account
  *  . added support for browser resizing and orientation changes
@@ -31,9 +32,7 @@
  * Based on Lightbox 2 by Lokesh Dhakar (http://www.huddletogether.com/projects/lightbox2/)
  * Originally written to make use of the Prototype framework, and Script.acalo.us, now altered to use jQuery.
  **/
-
- /** toyNN: davidtg@comtrya.com: fixed IE7-8 incompatabilities in 1.3.* branch **/
- 
+ /** toyNN: davidtg@comtrya.com: fixed IE7-8 incompatabilities in 1.3.* branch **/ 
 (function($){
     $.fn.lightbox = function(options) {
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
@@ -91,14 +90,13 @@
             opts.resizeTimeout = setTimeout(function () { doScale(false); }, 50); //a delay to avoid duplicate event calls.		
         }
         function getPageSize(){           
-            var pgDocHeight;
-            pgDocHeight = $(document).height();
+            var pgDocHeight = $(document).height();
             if (opts.isIE8 && pgDocHeight > 4096) {
                 pgDocHeight = 4096;
             }
-			//$(window).width()   returns width of browser viewport
+			var viewportHeight = $(window).height() - opts.adminBarHeight;			
 			//$(document).width() returns width of HTML document
-            return new Array($(document).width(), pgDocHeight, $(window).width(), $(window).height(), $(document).height());
+            return new Array($(document).width(), pgDocHeight, $(window).width(), viewportHeight, $(document).height());
         };
         //code for IE8 check provided by http://kangax.github.com/cft/
         function isIE8() {
@@ -114,7 +112,7 @@
             return isBuggy;
         };
         function getPageScroll() {
-            var xScroll, yScroll;
+            var xScroll = 0; var yScroll = 0;
             if (self.pageYOffset) {
                 yScroll = self.pageYOffset;
                 xScroll = self.pageXOffset;
@@ -125,6 +123,9 @@
                 yScroll = document.body.scrollTop;
                 xScroll = document.body.scrollLeft;
             }
+			if(opts.adminBarHeight && parseInt($('#wpadminbar').css('top'), 10) === 0){
+				yScroll += opts.adminBarHeight;
+			}	
             return new Array(xScroll, yScroll);
         };
 
@@ -440,6 +441,7 @@
         return imageArray;
     };
     $.fn.lightbox.defaults = {
+		adminBarHeight:28,
         overlayOpacity: 0.8,
         borderSize: 10,
         imageArray: new Array,
@@ -478,6 +480,7 @@
 			download: 'Download'
 		};
 		$('a[rel^="lightbox"]').lightbox({
+			adminBarHeight: $('#wpadminbar').height() || 0,
 			linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
 			displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
 			marginSize: (haveConf && JQLBSettings.marginSize) ? JQLBSettings.marginSize : 0,

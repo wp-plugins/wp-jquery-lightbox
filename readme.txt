@@ -162,6 +162,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 == Upgrade Notice ==
 
+= 1.3.4 =
+Lots of fixes, translations and support for the Admin Bar and Twentyeleven theme.
+
 = 1.3.3 =
 Fixes for Internet Explorer. Added Japanese translation.
 

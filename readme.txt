@@ -26,7 +26,7 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 
 If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
 
-*[//ulfben](http://profiles.wordpress.org/users/ulfben/)*
+*[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
 
 = 1.3.4 (2011-12-29) =
 * Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)

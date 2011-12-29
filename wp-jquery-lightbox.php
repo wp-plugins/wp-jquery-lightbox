@@ -84,7 +84,7 @@ function jqlb_css(){
 	$fileName = "lightbox.min.{$locale}.css";	
 	$path = plugin_dir_path(__FILE__)."styles/{$fileName}";
 	if(!is_readable($path)){
-		$fileName = 'lightbox.css';
+		$fileName = 'lightbox.min.css';
 	}
 	wp_enqueue_style('jquery.lightbox.min.css', plugin_dir_url(__FILE__).'styles/'.$fileName, false, '1.3.4');	
 }

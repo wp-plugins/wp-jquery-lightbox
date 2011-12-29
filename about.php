@@ -37,7 +37,7 @@ $author_profile = 'http://profiles.wordpress.org/users/ulfben/';
 	<noscript><a href='{$flattr_profile}' target='_blank'>
 	<img src='http://api.flattr.com/button/flattr-badge-large.png' alt='Flattr this' title='Flattr this' border='0' /></a></noscript></span></p>
 	<p>Or perhaps <a href='{$wishlist}' title='Amazon whishlist'>send me a book</a>? Used ones are fine! :)</p>
-	<p>//<a href='$author_site'>ulfben</a></p>								
+	<p>//<a href='$author_site'>Ulf Benjaminsson</a></p>								
 	<hr />
 	<h3>Need Help?</h3> 
 	<ol> 					

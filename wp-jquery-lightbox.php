@@ -16,8 +16,9 @@ function jqlb_init() {
 	//JQLB_URL = plugin_dir_url(__FILE__);
 	//JQLB_STYLES_URL = plugin_dir_url(__FILE__).'styles/'
 	//JQLB_LANGUAGES_DIR = plugin_dir_path(__FILE__) . 'languages/'
-	define('JQLB_SCRIPT', 'jquery.lightbox.min.js');		
-	load_plugin_textdomain('jqlb', false, plugin_dir_path(__FILE__).'languages/');
+	define('JQLB_SCRIPT', 'jquery.lightbox.min.js');
+	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');	
+	//load_plugin_textdomain('jqlb', false, plugin_dir_path(__FILE__).'languages/');
 	add_action('admin_init', 'jqlb_register_settings');
 	add_action('admin_menu', 'jqlb_register_menu_item');
 	add_action('wp_print_styles', 'jqlb_css');	

@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3.4 - 2011-12-29
+ * Version 1.3.4.1 - 2011-01-31
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -36,7 +36,7 @@
 (function($){
     $.fn.lightbox = function(options) {
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
-        return $(this).live("click", function () {
+        return $(this).on("click", function () {
             initialize();
             start(this);
             return false;

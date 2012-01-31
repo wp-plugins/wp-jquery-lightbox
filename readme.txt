@@ -2,9 +2,9 @@
 Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
-Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 1.3.4
+Requires at least: 3.3
+Tested up to: 3.3.1
+Stable tag: 1.3.4.1
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -27,6 +27,9 @@ You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC 
 If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
 
 *[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
+
+= 1.3.4.1 (2011-01-31) =
+* Updated deprecated jQuery calls (thanks; David Naber)
 
 = 1.3.4 (2011-12-29) =
 * Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)
@@ -101,6 +104,8 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 == Changelog ==
+= 1.3.4.1 (2011-01-31) =
+* Updated deprecated jQuery calls (thanks; David Naber)
 
 = 1.3.4 (2011-12-29) =
 * Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)
@@ -161,6 +166,8 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * Release.
 
 == Upgrade Notice ==
+= 1.3.4.1 (2011-01-31) =
+Updated deprecated jQuery calls (thanks; David Naber)
 
 = 1.3.4 =
 Lots of fixes, translations and support for the Admin Bar and Twentyeleven theme.

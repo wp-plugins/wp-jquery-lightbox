@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 1.3.4.1
+Stable tag: 1.3.4.2
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -28,6 +28,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 *[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
 
+= 1.3.4.2 (2011-02-01) =
+* Fallbacks for people using older jQuery
+
 = 1.3.4.1 (2011-01-31) =
 * Updated deprecated jQuery calls (thanks; David Naber)
 
@@ -40,7 +43,6 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * Added info on how to disable lightbox for specific links (bogus rel-attribute)
 * Added translations: [Romanian](http://wordpress.org/support/topic/wp-jquery-lightbox-romanian-translation?replies=1), [French](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-french-translation?replies=2#post-2187626) and [Hebrew](www.sagive.co.il)
 * Updated: Russian language icons (thanks; Ilya Gorenburg), [Japanese translation](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation-for-133?replies=1)
-
 
 = 1.3.3 (2011-06-12) =
 * Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
@@ -104,6 +106,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 == Changelog ==
+= 1.3.4.2 (2011-02-01) =
+* Fallbacks for people using older jQuery
+
 = 1.3.4.1 (2011-01-31) =
 * Updated deprecated jQuery calls (thanks; David Naber)
 
@@ -166,6 +171,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * Release.
 
 == Upgrade Notice ==
+= 1.3.4.2 (2011-02-01) =
+* Fallbacks for people using older jQuery
+
 = 1.3.4.1 (2011-01-31) =
 Updated deprecated jQuery calls (thanks; David Naber)
 

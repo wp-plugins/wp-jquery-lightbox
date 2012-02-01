@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3.4.1 - 2011-01-31
+ * Version 1.3.4.2 - 2011-02-01
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -36,12 +36,18 @@
 (function($){
     $.fn.lightbox = function(options) {
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
-        return $(this).on("click", function () {
+		function onClick() {
             initialize();
             start(this);
             return false;
-        });
-        function initialize() {
+        }	
+		if(parseFloat($().jquery) >= 1.7){
+			return $(this).on("click", onClick);
+        }else{
+			return $(this).live("click", onClick); //deprecated since 1.7
+		}		
+		
+		function initialize() {
             $(window).bind('orientationchange', resizeListener);
             $(window).bind('resize', resizeListener);
             // if (opts.followScroll) { $(window).bind('scroll', orientListener); }

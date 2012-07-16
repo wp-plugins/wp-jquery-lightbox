@@ -2,8 +2,8 @@
 Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
-Requires at least: 3.3
-Tested up to: 3.3.1
+Requires at least: 3.4
+Tested up to: 3.4.1
 Stable tag: 1.3.4.2
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
@@ -215,6 +215,15 @@ First release.
 
 == Frequently Asked Questions ==
 
+= Can the lightbox display the image description instead of the title? =
+WP jQuery Lightbox grabs texts from three different HTML nodes;
+
+1. `title`-attribute of link-to-image
+1. `img` tag's `title` attribute (if 1 is empty)
+1. HTML content of `.gallery-caption` or `.wp-caption-text` (in that order)
+
+Look at how the default TwentyTen theme uses these in its galleries and set up your theme so it outputs what you need in these places.
+
 = I can see elements of my site through the overlay = 
 
 It's a problem of [z-index](http://www.w3schools.com/Css/pr_pos_z-index.asp). Check [the z-index property](http://www.w3schools.com/Css/pr_pos_z-index.asp) for the problematic elements, and force them to be less than 100. (Thanks [dway](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-title-captions-bug-found-solved-and-fix-proposed?replies=20#post-2052340)!)
@@ -233,6 +242,15 @@ directly to the image files - allowing Lightbox to function.
 = Must fade-in and animation of all *box-scripts be so slow? =
 
 WP-jQuery Lightbox lets you configure the animation duration and disable image resizing from the admin panel. Set duration to 0 to disable animations entirely.
+
+= For developers: =
+1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
+1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+
+* If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+* If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+* [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 = Can I help you in any way? =
 

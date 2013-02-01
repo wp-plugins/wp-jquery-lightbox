@@ -36,6 +36,9 @@
 (function($){
     $.fn.lightbox = function(options) {
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
+		if($("#overlay").is(':visible')){//to resize the overlay whenever doLightbox is invoked
+			$(window).trigger('resize'); //we need this to deal with InfiniteScroll and similar.
+		}
 		function onClick() {
             initialize();
             start(this);
@@ -45,16 +48,15 @@
 			return $(this).on("click", onClick);
         }else{
 			return $(this).live("click", onClick); //deprecated since 1.7
-		}		
-		
+		}				
 		function initialize() {
             $(window).bind('orientationchange', resizeListener);
             $(window).bind('resize', resizeListener);
-            // if (opts.followScroll) { $(window).bind('scroll', orientListener); }
             $('#overlay').remove();
             $('#lightbox').remove();
             opts.isIE8 = isIE8(); // //http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
-            opts.inprogress = false;          
+            opts.inprogress = false;
+			opts.auto = -1;
             var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + opts.strings.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + opts.strings.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
             var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><span id="numberDisplay"></span></div><div id="bottomNav">';
             if (opts.displayHelp) {
@@ -80,7 +82,17 @@
                 $("#lightboxImage").click(function () { return false; });
                 $("#hoverNav").click(function () { return false; });
             }
+			
+			$("#caption").click(function() {
+				clearInterval(opts.auto);
+				opts.auto = setInterval(function(){console.log("p"); changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, 1000);
+				return false;
+			});		
+			console.log(opts.auto);
         };
+		
+		
+		
         //allow image to reposition & scale if orientation change or resize occurs.
         function resizeListener(e) {
             if (opts.resizeTimeout) {
@@ -146,16 +158,20 @@
             }
             var imageNum = 0;  			
 			var images = [];
-			opts.downloads = {};
+			opts.downloads = {}; //to keep track of any custom download links
 			// if image is NOT part of a set..				
 			if (!imageLink.rel || (imageLink.rel == '')) {
 				// add single image to Lightbox.imageArray
+				//TODO: find out of this *ever* happens
 				var s = '';
+				var jqImg = $(this).children(':first-child');
 				if (imageLink.title) {
 					s = imageLink.title;
-				} else if ($(this).children(':first-child').attr('title')) {
-					s = $(this).children(':first-child').attr('title');
-				} 
+				} else if (jqImg.attr('title')) {
+					s = jqImg.attr('title');
+				} else if(jqImg.attr('alt')){
+					title = jqImg.attr('alt'); //if neither link nor image have a title attribute
+				}
 				if(opts.displayDownloadLink || $(imageLink).attr("data-download")){							
 					opts.downloads[images.length] = $(imageLink).attr("data-download"); //use length as an index. convenient since it will always be unique							
 				}						
@@ -168,10 +184,13 @@
 						var caption = '';
 						var captionText = '';
 						var jqThis = $(this);
+						var jqImg = jqThis.children('img:first-child');
 						if (this.title) { //title of link
 							title = this.title;
-						} else if (jqThis.children('img:first-child').attr('title')) {
-							title = jqThis.children('img:first-child').attr('title'); //grab the title from the image if the link lacks one
+						} else if (jqImg.attr('title')) {
+							title = jqImg.attr('title'); //grab the title from the image if the link lacks one
+						} else if(jqImg.attr('alt')){
+							title = jqImg.attr('alt'); //if neither link nor image have a title attribute
 						}
 						if (jqThis.parent().next('.gallery-caption').html()) {
 							var jq = jqThis.parent().next('.gallery-caption');
@@ -324,7 +343,7 @@
         };
 		
 		function preloadNeighborImages() {
-            if (opts.loopImages && opts.imageArray.length > 1) {
+            if (opts.imageArray.length > 1) {
                 preloadNextImage = new Image();
                 preloadNextImage.src = opts.imageArray[(opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1][0]
                 preloadPrevImage = new Image();
@@ -351,60 +370,41 @@
             if (images[i][1]) {
                 $('#caption').html(images[i][1]).show();
             }
-            var nav_html = '';
-            var prev = '';
+            var nav_html = '';           
             var pos = (images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';
             var link = '';
 			if(opts.displayDownloadLink || opts.downloads[downloadIndex]){
 				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 
 				link = (opts.displayDownloadLink) ? '<a href="' + url + '" id="downloadLink" target="'+opts.linkTarget+'">' + txt.download + '</a>' : '';
-			}
-            var next = '';
-            if (images.length > 1 && !opts.disableNavbarLinks) {	 // display previous / next text links   			           
-                if ((i) > 0 || opts.loopImages) {
-                    prev = '<a title="' + txt.prevLinkTitle + '" href="#" id="prevLinkText">' + txt.prevLinkText + "</a>";
-                }
-                if (((i + 1) < images.length) || opts.loopImages) {
-                    next += '<a title="' + txt.nextLinkTitle + '" href="#" id="nextLinkText">' + txt.nextLinkText + "</a>";
-                }
-            }
-            nav_html = prev + nav_html + pos + link + next;
+			}     
+            nav_html = nav_html + pos + link;
             if (nav_html != '') {
                 $('#numberDisplay').html(nav_html).show();
             }
         };
-
         function updateNav() {
             if (opts.imageArray.length > 1) {
-                $('#hoverNav').show();
-                // if loopImages is true, always show next and prev image buttons 
-                if (opts.loopImages) {
-                    $('#prevLink,#prevLinkText').show().click(function () {
-                        changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); return false;
-                    });
-                    $('#nextLink,#nextLinkText').show().click(function () {
-                        changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); return false;
-                    });
-                } else {
-                    // if not first image in set, display prev image button
-                    if (opts.activeImage != 0) {
-                        $('#prevLink,#prevLinkText').show().click(function () {
-                            changeImage(opts.activeImage - 1); return false;
-                        });
-                    }
-                    // if not last image in set, display next image button
-                    if (opts.activeImage != (opts.imageArray.length - 1)) {
-                        $('#nextLink,#nextLinkText').show().click(function () {
-                            changeImage(opts.activeImage + 1); return false;
-                        });
-                    }
-                }
+                $('#hoverNav').show();      
+				$('#prevLink').show().click(function () {
+					changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); return false;
+				});
+				$('#nextLink').show().click(function () {
+					changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); return false;
+				});
+				if($.fn.touchwipe){
+					$('#imageContainer').touchwipe({
+						 wipeLeft: function() { changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); },
+						 wipeRight: function() { changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); },					
+						 min_move_x: 20,				
+						 preventDefaultEvents: true
+					});
+				}
                 enableKeyboardNav();
             }
         };
-
         function end() {
             disableKeyboardNav();
+			clearInterval(opts.auto);
             $('#lightbox').hide();
             $('#overlay').fadeOut();
             $('select, object, embed').show();
@@ -418,23 +418,11 @@
             if ((key == 'x') || (key == 'o') || (key == 'c') || (keycode == escapeKey)) { // close lightbox
                 end();
             } else if ((key == 'p') || (keycode == 37)) { // display previous image
-                if (o.loopImages) {
-                    disableKeyboardNav();
-                    changeImage((o.activeImage == 0) ? (o.imageArray.length - 1) : o.activeImage - 1);
-                }
-                else if (o.activeImage != 0) {
-                    disableKeyboardNav();
-                    changeImage(o.activeImage - 1);
-                }
+				disableKeyboardNav();
+                changeImage((o.activeImage == 0) ? (o.imageArray.length - 1) : o.activeImage - 1);
             } else if ((key == 'n') || (keycode == 39)) { // display next image
-                if (opts.loopImages) {
-                    disableKeyboardNav();
-                    changeImage((o.activeImage == (o.imageArray.length - 1)) ? 0 : o.activeImage + 1);
-                }
-                else if (o.activeImage != (o.imageArray.length - 1)) {
-                    disableKeyboardNav();
-                    changeImage(o.activeImage + 1);
-                }
+                disableKeyboardNav();
+                changeImage((o.activeImage == (o.imageArray.length - 1)) ? 0 : o.activeImage + 1);
             }          
             return false;
         };
@@ -456,9 +444,7 @@
         heightCurrent: 250,
         xScale: 1,
         yScale: 1,
-        displayTitle: true,
-        disableNavbarLinks: true,
-        loopImages: true,
+        displayTitle: true,       
         imageClickClose: true,
         followScroll: false,
         isIE8: false  //toyNN:internal value only
@@ -467,6 +453,7 @@
 })(jQuery);
 //you can call this manually at any time to activate the lightboxing. (useful for ajax-loaded content)
 function doLightBox(){
+	var ua = navigator.userAgent;
 	var haveConf = (typeof JQLBSettings == 'object');
 	if(haveConf && JQLBSettings.resizeSpeed) {
 		JQLBSettings.resizeSpeed = parseInt(JQLBSettings.resizeSpeed);
@@ -477,9 +464,7 @@ function doLightBox(){
 	var default_strings = {
 		help: ' Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.',
 		prevLinkTitle: 'previous image',
-		nextLinkTitle: 'next image',
-		prevLinkText:  '&laquo; Previous',
-		nextLinkText:  'Next &raquo;',
+		nextLinkTitle: 'next image',		
 		closeTitle: 'close image gallery',
 		image: 'Image ',
 		of: ' of ',
@@ -493,8 +478,7 @@ function doLightBox(){
 		fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,
 		resizeSpeed: (haveConf && JQLBSettings.resizeSpeed >= 0) ? JQLBSettings.resizeSpeed : 400,
 		displayDownloadLink: (haveConf && JQLBSettings.displayDownloadLink == '0') ? false : true,
-		navbarOnTop: (haveConf && JQLBSettings.navbarOnTop == '0') ? false : true,
-		//followScroll: (haveConf && JQLBSettings.followScroll == '0') ? false : true,
+		navbarOnTop: (haveConf && JQLBSettings.navbarOnTop == '0') ? false : true,		
 		strings: (haveConf && typeof JQLBSettings.help == 'string') ? JQLBSettings : default_strings
 	});	
 }

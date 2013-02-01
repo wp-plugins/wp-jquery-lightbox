@@ -23,9 +23,8 @@ $author_profile = 'http://profiles.wordpress.org/users/ulfben/';
 /* ]]> */
 </script>
 <style type="text/css">
-	#about{ float: right; width:350px; background: #ffc; border: 1px solid #333; padding: 5px; text-align: justify; }
-	#about p, li, ol{ font-family:verdana; font-size:11px; }
-	#about h3 {text-align:center;}
+	#about{ float: right; width:350px; background: #ffc; border: 1px solid #333; padding: 5px; text-align: justify; font-family:verdana; font-size:11px; }
+	div#about h3 {text-align:center;}
 	.field_info {text-align:right;};
 </style>
 <?php echo "<div id='about'> 

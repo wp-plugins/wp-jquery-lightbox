@@ -109,12 +109,17 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 == Changelog ==
-= 1.3.5 (2013-01-15) =
+= 1.3.5 (2013-xx-xx) =
+* Added swipe gestures on supporting devices
+* Added support for a 'set'-attribute to the gallery-shortcode.
 * Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
 * Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
 * Added information on how to get lightbox to pick up texts from your media library
 * Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/).
 * Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
+* Added support to pick text from the image ALT-attribute. 
+* Fix to support Infinite Scroll and similar
+* Fix leaky CSS on admin page
 
 = 1.3.4.2 (2011-02-01) =
 * Fallbacks for people using older jQuery
@@ -230,6 +235,7 @@ WP jQuery Lightbox grabs texts from three different HTML nodes;
 
 1. `title`-attribute of link-to-image
 1. `img` tag's `title` attribute (if 1 is empty)
+1. `img` tag's `alt` attribute (if 1 and 2 is empty)
 1. HTML content of `.gallery-caption` or `.wp-caption-text` (in that order)
 
 Look at how the default TwentyTwelve theme uses these in its galleries and set up your theme so it outputs what you need in these places.

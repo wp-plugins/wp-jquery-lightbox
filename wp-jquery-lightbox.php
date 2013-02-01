@@ -8,6 +8,8 @@ Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 */
 add_action( 'plugins_loaded', 'jqlb_init' );
+global $jqlb_set;
+$jqlb_set = -1;
 function jqlb_init() {
 	if(!defined('ULFBEN_DONATE_URL')){
 		define('ULFBEN_DONATE_URL', 'http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=21&y=17');
@@ -25,6 +27,7 @@ function jqlb_init() {
 	add_action('wp_print_scripts', 'jqlb_js');
 	add_filter('plugin_row_meta', 	'jqlb_set_plugin_meta', 2, 10);	
 	add_filter('the_content', 'jqlb_autoexpand_rel_wlightbox', 99);
+	add_filter('post_gallery', 'jqlb_filter_sets', 10, 2);	
 	if(get_option('jqlb_comments') == 1){
 		remove_filter('pre_comment_content', 'wp_rel_nofollow');
 		add_filter('comment_text', 'jqlb_lightbox_comment', 99);
@@ -92,14 +95,14 @@ function jqlb_css(){
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
-	wp_enqueue_script('jquery', '', array(), '1.7.1', true);			
-	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__ ),  Array('jquery'), '1.3.4.1', true);
+	wp_enqueue_script('jquery', '', array(), '1.7.1', true);
+	wp_enqueue_script('wp-jquery-lightbox-swipe', plugins_url("jquery.touchwipe.min.js", __FILE__ ),  Array('jquery'), '1.3.4.1', true);	
+	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__ ),  Array('jquery','wp-jquery-lightbox-swipe'), '1.3.4.1', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
 		'displayDownloadLink' => get_option('jqlb_show_download'),
-		'navbarOnTop' => get_option('jqlb_navbarOnTop'),
-		'loopImages' => get_option('jqlb_loopImages'),
+		'navbarOnTop' => get_option('jqlb_navbarOnTop'),		
 		'resizeCenter' => get_option('jqlb_resizeCenter'),
 		'marginSize' => get_option('jqlb_margin_size'),
 		'linkTarget' => get_option('jqlb_link_target'),
@@ -107,9 +110,7 @@ function jqlb_js() {
 		/* translation */
 		'help' => __(get_option('jqlb_help_text'), 'jqlb'),
 		'prevLinkTitle' => __('previous image', 'jqlb'),
-		'nextLinkTitle' => __('next image', 'jqlb'),
-		'prevLinkText' =>  __('&laquo; Previous', 'jqlb'),
-		'nextLinkText' => __('Next &raquo;', 'jqlb'),
+		'nextLinkTitle' => __('next image', 'jqlb'),		
 		'closeTitle' => __('close image gallery', 'jqlb'),
 		'image' => __('Image ', 'jqlb'),
 		'of' => __(' of ', 'jqlb'),
@@ -148,6 +149,23 @@ function jqlb_do_regexp($content, $id){
 	$pattern = "/(<a(?![^>]*?rel=['\"]lightbox.*)[^>]*?href=['\"][^'\"]+?\.(?:bmp|gif|jpg|jpeg|png)(\?\S{0,}){0,1}['\"][^\>]*)>/i";
 	$replacement = '$1 rel="lightbox['.$id.']">';
 	return preg_replace($pattern, $replacement, $content);
+}
+
+function jqlb_filter_sets($html, $attr) {//runs on the post_gallery filter.
+	global $jqlb_set;
+	if(empty($attr['set'])){
+		$jqlb_set = -1;
+		remove_filter('wp_get_attachment_link','jqlb_lightbox_gallery_links',10,1);			
+	}else{
+		$jqlb_set = $attr['set'];		
+		add_filter('wp_get_attachment_link','jqlb_lightbox_gallery_links',10,1);	
+	}
+	return '';
+}
+function jqlb_lightbox_gallery_links($html){ //honors our custom set-attribute of the gallery shortcode.   
+	global $jqlb_set;
+	if(!isset($jqlb_set) || $jqlb_set == -1){return $html;}
+    return str_replace('<a','<a rel="lightbox['.$jqlb_set.']"', $html);    
 }
 
 function jqlb_bool_intval($v){

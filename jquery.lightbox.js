@@ -54,14 +54,8 @@
             $('#overlay').remove();
             $('#lightbox').remove();
             opts.isIE8 = isIE8(); // //http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
-            opts.inprogress = false;
-            // if jsonData, build the imageArray from data provided in JSON format
-            if (opts.jsonData && opts.jsonData.length > 0) {
-                var parser = opts.jsonDataParser ? opts.jsonDataParser : $.fn.lightbox.parseJsonData;
-                opts.imageArray = [];
-                opts.imageArray = parser(opts.jsonData);
-            }
-            var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + opts.strings.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + opts.strings.nextLinkTitle + '"></a></div><div id="loading"><a href="javascript://" id="loadingLink"><div id="jqlb_loading"></div></a></div></div></div>';
+            opts.inprogress = false;          
+            var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + opts.strings.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + opts.strings.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
             var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><span id="numberDisplay"></span></div><div id="bottomNav">';
             if (opts.displayHelp) {
                 imageData += '<span id="helpDisplay">' + opts.strings.help + '</span>';
@@ -150,73 +144,78 @@
                     $("#overlay").css({ top: newTop + 'px' });
                 }
             }
-            imageNum = 0;
-            // if data is not provided by jsonData parameter
-            if (!opts.jsonData) {
-                opts.imageArray = [];
-                // if image is NOT part of a set..				
-                if (!imageLink.rel || (imageLink.rel == '')) {
-                    // add single image to Lightbox.imageArray
-                    var s = '';
-                    if (imageLink.title) {
-                        s = imageLink.title;
-                    } else if ($(this).children(':first-child').attr('title')) {
-                        s = $(this).children(':first-child').attr('title');
-                    }
-                    opts.imageArray.push(new Array(imageLink.href, opts.displayTitle ? s : ''));
-                } else {
-                    // if image is part of a set..
-                    $("a").each(function () {
-                        if (this.href && (this.rel == imageLink.rel)) {
-                            var title = '';
-                            var caption = '';
-                            var captionText = '';
-                            var jqThis = $(this);
-                            if (this.title) {
-                                title = this.title;
-                            } else if (jqThis.children('img:first-child').attr('title')) {
-                                title = jqThis.children('img:first-child').attr('title'); //grab the title from the image if the link lacks one
-                            }
-                            if (jqThis.parent().next('.gallery-caption').html()) {
-                                var jq = jqThis.parent().next('.gallery-caption');
-                                caption = jq.html();
-                                captionText = jq.text();
-                            } else if (jqThis.next('.wp-caption-text').html()) {
-                                caption = jqThis.next('.wp-caption-text').html();
-                                captionText = jqThis.next('.wp-caption-text').text();
-                            }
-                            title = $.trim(title);
-                            captionText = $.trim(captionText);
-                            if (title.toLowerCase() == captionText.toLowerCase()) {
-                                title = caption; //to keep linked captions
-                                caption = ''; //but not duplicate the text								
-                            }
-							var s = '';
-							if (title != '') {
-								s = '<span id="titleText">' + title + '</span>';
+            var imageNum = 0;  			
+			var images = [];
+			opts.downloads = {};
+			// if image is NOT part of a set..				
+			if (!imageLink.rel || (imageLink.rel == '')) {
+				// add single image to Lightbox.imageArray
+				var s = '';
+				if (imageLink.title) {
+					s = imageLink.title;
+				} else if ($(this).children(':first-child').attr('title')) {
+					s = $(this).children(':first-child').attr('title');
+				} 
+				if(opts.displayDownloadLink || $(imageLink).attr("data-download")){							
+					opts.downloads[images.length] = $(imageLink).attr("data-download"); //use length as an index. convenient since it will always be unique							
+				}						
+				images.push(new Array(imageLink.href, opts.displayTitle ? s : ''));
+			} else {
+				// if image is part of a set..
+				$("a").each(function () {
+					if (this.href && (this.rel == imageLink.rel)) {
+						var title = '';
+						var caption = '';
+						var captionText = '';
+						var jqThis = $(this);
+						if (this.title) { //title of link
+							title = this.title;
+						} else if (jqThis.children('img:first-child').attr('title')) {
+							title = jqThis.children('img:first-child').attr('title'); //grab the title from the image if the link lacks one
+						}
+						if (jqThis.parent().next('.gallery-caption').html()) {
+							var jq = jqThis.parent().next('.gallery-caption');
+							caption = jq.html();
+							captionText = jq.text();
+						} else if (jqThis.next('.wp-caption-text').html()) {
+							caption = jqThis.next('.wp-caption-text').html();
+							captionText = jqThis.next('.wp-caption-text').text();
+						}
+						title = $.trim(title);
+						captionText = $.trim(captionText);
+						if (title.toLowerCase() == captionText.toLowerCase()) {
+							title = caption; //to keep linked captions
+							caption = ''; //but not duplicate the text								
+						}
+						var s = '';
+						if (title != '') {
+							s = '<span id="titleText">' + title + '</span>';
+						} 
+						if (caption != '') {
+							if (title != ''){
+								s += '<br />';
 							} 
-							if (caption != '') {
-								if (title != ''){
-									s += '<br />';
-								} 
-								s += '<span id="captionText">' + caption +'</span>';
-							}
-                            opts.imageArray.push(new Array(this.href, opts.displayTitle ? s : ''));
-                        }
-                    });
-                }
-            }
-            if (opts.imageArray.length > 1) {
-                for (i = 0; i < opts.imageArray.length; i++) {
-                    for (j = opts.imageArray.length - 1; j > i; j--) {
-                        if (opts.imageArray[i][0] == opts.imageArray[j][0]) {
-                            opts.imageArray.splice(j, 1);
+							s += '<span id="captionText">' + caption +'</span>';
+						}						
+						if(opts.displayDownloadLink || jqThis.attr("data-download")){							
+							opts.downloads[images.length] = jqThis.attr("data-download"); //use length as an index. convenient since it will always be unique							
+						}						
+						images.push(new Array(this.href, opts.displayTitle ? s : '', images.length));
+					}
+				});
+			}            
+            if (images.length > 1) {
+                for (i = 0; i < images.length; i++) {
+                    for (j = images.length - 1; j > i; j--) {
+                        if (images[i][0] == images[j][0]) {
+                            images.splice(j, 1);
                         }
                     }
                 }
-                while (opts.imageArray[imageNum][0] != imageLink.href) { imageNum++; }
+                while (images[imageNum][0] != imageLink.href) { imageNum++; }
             }
-            // calculate top and left offset for the lightbox
+            opts.imageArray = images;
+			// calculate top and left offset for the lightbox
             setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();
             changeImage(imageNum);
         };
@@ -234,7 +233,7 @@
                 opts.inprogress = true;
                 opts.activeImage = imageNum;
                 // hide elements during transition
-                $('#loading').show();
+                $('#jqlb_loading').show();
                 $('#lightboxImage').hide();
                 $('#hoverNav').hide();
                 $('#prevLink').hide();
@@ -315,7 +314,7 @@
             $('#caption').show();
             //$('#imageDataContainer').slideDown(400);
             //$("#imageDetails").hide().fadeIn(400);		
-            $('#loading').hide();
+            $('#jqlb_loading').hide();
             if (opts.resizeSpeed > 0) {
                 $('#lightboxImage').fadeIn("fast");
             } else {
@@ -342,24 +341,31 @@
             }
         };
 
-
         function updateDetails() {
             $('#numberDisplay').html('');
             $('#caption').html('').hide();
-            if (opts.imageArray[opts.activeImage][1]) {
-                $('#caption').html(opts.imageArray[opts.activeImage][1]).show();
+			var images = opts.imageArray;
+			var txt = opts.strings;
+			var i = opts.activeImage;
+			var downloadIndex = images[i][2];
+            if (images[i][1]) {
+                $('#caption').html(images[i][1]).show();
             }
             var nav_html = '';
             var prev = '';
-            var pos = (opts.imageArray.length > 1) ? opts.strings.image + (opts.activeImage + 1) + opts.strings.of + opts.imageArray.length : '';
-            var link = (opts.displayDownloadLink) ? '<a href="' + opts.imageArray[opts.activeImage][0] + '" id="downloadLink" target="'+opts.linkTarget+'">' + opts.strings.download + '</a>' : '';
+            var pos = (images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';
+            var link = '';
+			if(opts.displayDownloadLink || opts.downloads[downloadIndex]){
+				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 
+				link = (opts.displayDownloadLink) ? '<a href="' + url + '" id="downloadLink" target="'+opts.linkTarget+'">' + txt.download + '</a>' : '';
+			}
             var next = '';
-            if (opts.imageArray.length > 1 && !opts.disableNavbarLinks) {	 // display previous / next text links   			           
-                if ((opts.activeImage) > 0 || opts.loopImages) {
-                    prev = '<a title="' + opts.strings.prevLinkTitle + '" href="#" id="prevLinkText">' + opts.strings.prevLinkText + "</a>";
+            if (images.length > 1 && !opts.disableNavbarLinks) {	 // display previous / next text links   			           
+                if ((i) > 0 || opts.loopImages) {
+                    prev = '<a title="' + txt.prevLinkTitle + '" href="#" id="prevLinkText">' + txt.prevLinkText + "</a>";
                 }
-                if (((opts.activeImage + 1) < opts.imageArray.length) || opts.loopImages) {
-                    next += '<a title="' + opts.strings.nextLinkTitle + '" href="#" id="nextLinkText">' + opts.strings.nextLinkText + "</a>";
+                if (((i + 1) < images.length) || opts.loopImages) {
+                    next += '<a title="' + txt.nextLinkTitle + '" href="#" id="nextLinkText">' + txt.nextLinkText + "</a>";
                 }
             }
             nav_html = prev + nav_html + pos + link + next;
@@ -438,14 +444,7 @@
         function disableKeyboardNav() {
             $(document).unbind('keydown');
         };
-    };
-    $.fn.lightbox.parseJsonData = function(data) {
-        var imageArray = [];
-        $.each(data, function () {
-            imageArray.push(new Array(this.url, this.title));
-        });
-        return imageArray;
-    };
+    };    
     $.fn.lightbox.defaults = {
 		adminBarHeight:28,
         overlayOpacity: 0.8,
@@ -461,8 +460,6 @@
         disableNavbarLinks: true,
         loopImages: true,
         imageClickClose: true,
-        jsonData: null,
-        jsonDataParser: null,
         followScroll: false,
         isIE8: false  //toyNN:internal value only
     };	

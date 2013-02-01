@@ -84,7 +84,7 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 	Note the use of title-attribute to set a caption
 		
-1. To group sets of related images, follow step 2 but additionally include a group name in the rel attribute:
+1. To group sets of related images, follow step 2 but additionally include a group name in the `rel` attribute:
 	
 	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
 	
@@ -96,6 +96,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 	
 1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
+1. To configure the download-link, set the `data-download` attribute:
+	`<a href="image-medium.jpg" rel="lightbox[]" data-download="image-superlarge.jpg"> [...] </a>`
+
 = For developers: =
 1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
 1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
@@ -106,6 +109,13 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 == Changelog ==
+= 1.3.5 (2013-01-15) =
+* Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
+* Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
+* Added information on how to get lightbox to pick up texts from your media library
+* Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/).
+* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
+
 = 1.3.4.2 (2011-02-01) =
 * Fallbacks for people using older jQuery
 
@@ -222,7 +232,7 @@ WP jQuery Lightbox grabs texts from three different HTML nodes;
 1. `img` tag's `title` attribute (if 1 is empty)
 1. HTML content of `.gallery-caption` or `.wp-caption-text` (in that order)
 
-Look at how the default TwentyTen theme uses these in its galleries and set up your theme so it outputs what you need in these places.
+Look at how the default TwentyTwelve theme uses these in its galleries and set up your theme so it outputs what you need in these places.
 
 = I can see elements of my site through the overlay = 
 

@@ -12,7 +12,7 @@
 	line-height: 0;
 	}
 
-#jqlb_loading{
+#jqlb_spinner{
 	height:32px;
 	background-image:url('./images/loading.gif');
 	background-repeat:no-repeat;				
@@ -39,7 +39,7 @@
 	padding: 10px;
 	}
 
-#loading{
+#jqlb_loading{
 	position: absolute;
 	top: 40%;
 	left: 0%;

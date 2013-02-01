@@ -16,7 +16,7 @@ function jqlb_init() {
 	//JQLB_URL = plugin_dir_url(__FILE__);
 	//JQLB_STYLES_URL = plugin_dir_url(__FILE__).'styles/'
 	//JQLB_LANGUAGES_DIR = plugin_dir_path(__FILE__) . 'languages/'
-	define('JQLB_SCRIPT', 'jquery.lightbox.min.js');
+	define('JQLB_SCRIPT', 'jquery.lightbox.js');
 	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');	
 	//load_plugin_textdomain('jqlb', false, plugin_dir_path(__FILE__).'languages/');
 	add_action('admin_init', 'jqlb_register_settings');
@@ -82,7 +82,8 @@ function jqlb_get_locale(){
 function jqlb_css(){	
 	if(is_admin() || is_feed()){return;}
 	$locale = jqlb_get_locale();
-	$fileName = "lightbox.min.{$locale}.css";	
+	//$fileName = "lightbox.min.{$locale}.css";	
+	$fileName = "lightbox.css";	
 	$path = plugin_dir_path(__FILE__)."styles/{$fileName}";
 	if(!is_readable($path)){
 		$fileName = 'lightbox.min.css';
@@ -143,8 +144,8 @@ function jqlb_apply_lightbox($content, $id = -1){
 	if there are already rel="lightbox[something]" attributes, they are not clobbered. 
 	Michael Tyson, you are a regular expressions god! - http://atastypixel.com */
 function jqlb_do_regexp($content, $id){
-	$id = esc_attr($id);
-	$pattern = "/(<a(?![^>]*?rel=['\"]lightbox.*)[^>]*?href=['\"][^'\"]+?\.(?:bmp|gif|jpg|jpeg|png)\?{0,1}\S{0,}['\"][^\>]*)>/i";
+	$id = esc_attr($id);			
+	$pattern = "/(<a(?![^>]*?rel=['\"]lightbox.*)[^>]*?href=['\"][^'\"]+?\.(?:bmp|gif|jpg|jpeg|png)(\?\S{0,}){0,1}['\"][^\>]*)>/i";
 	$replacement = '$1 rel="lightbox['.$id.']">';
 	return preg_replace($pattern, $replacement, $content);
 }

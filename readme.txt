@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.3.4.2
+Stable tag: 1.4
 License: GPLv2 or later
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.

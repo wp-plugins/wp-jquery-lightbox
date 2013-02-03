@@ -3,9 +3,10 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.3.4.2
+Version: 1.4
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
+License: GPLv2 or later
 */
 add_action( 'plugins_loaded', 'jqlb_init' );
 global $jqlb_set;
@@ -19,6 +20,7 @@ function jqlb_init() {
 	//JQLB_STYLES_URL = plugin_dir_url(__FILE__).'styles/'
 	//JQLB_LANGUAGES_DIR = plugin_dir_path(__FILE__) . 'languages/'
 	define('JQLB_SCRIPT', 'jquery.lightbox.js');
+	define('JQLB_TOUCH_SCRIPT', 'jquery.touchwipe.min.js');
 	load_plugin_textdomain('jqlb', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');	
 	//load_plugin_textdomain('jqlb', false, plugin_dir_path(__FILE__).'languages/');
 	add_action('admin_init', 'jqlb_register_settings');
@@ -55,9 +57,9 @@ function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_navbarOnTop', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_margin_size', 'floatval');
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_speed', 'jqlb_pos_intval');
+	register_setting( 'jqlb-settings-group', 'jqlb_slideshow_speed', 'jqlb_pos_intval');	
 	register_setting( 'jqlb-settings-group', 'jqlb_help_text');
-	register_setting( 'jqlb-settings-group', 'jqlb_link_target');
-	
+	register_setting( 'jqlb-settings-group', 'jqlb_link_target');	
 	//register_setting( 'jqlb-settings-group', 'jqlb_follow_scroll', 'jqlb_bool_intval');
 	add_option('jqlb_help_text', '');
 	add_option('jqlb_link_target', '_self');
@@ -67,6 +69,7 @@ function jqlb_register_settings(){
 	add_option('jqlb_show_download', 0); 
 	add_option('jqlb_navbarOnTop', 0);
 	add_option('jqlb_resize_speed', 400); 
+	add_option('jqlb_slideshow_speed', 4000); 
 	//add_option('jqlb_follow_scroll', 0);  
 }
 function jqlb_register_menu_item() {		
@@ -91,13 +94,13 @@ function jqlb_css(){
 	if(!is_readable($path)){
 		$fileName = 'lightbox.min.css';
 	}
-	wp_enqueue_style('jquery.lightbox.min.css', plugin_dir_url(__FILE__).'styles/'.$fileName, false, '1.3.4');	
+	wp_enqueue_style('jquery.lightbox.min.css', plugin_dir_url(__FILE__).'styles/'.$fileName, false, '1.4');	
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
-	wp_enqueue_script('jquery', '', array(), '1.7.1', true);
-	wp_enqueue_script('wp-jquery-lightbox-swipe', plugins_url("jquery.touchwipe.min.js", __FILE__ ),  Array('jquery'), '1.3.4.1', true);	
-	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__ ),  Array('jquery','wp-jquery-lightbox-swipe'), '1.3.4.1', true);
+	wp_enqueue_script('jquery', '', array(), null, true);
+	wp_enqueue_script('wp-jquery-lightbox-swipe', plugins_url(JQLB_TOUCH_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);	
+	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
@@ -106,7 +109,7 @@ function jqlb_js() {
 		'resizeCenter' => get_option('jqlb_resizeCenter'),
 		'marginSize' => get_option('jqlb_margin_size'),
 		'linkTarget' => get_option('jqlb_link_target'),
-		//'followScroll' => get_option('jqlb_follow_scroll'),
+		'slideshowSpeed' => get_option('jqlb_slideshow_speed'),
 		/* translation */
 		'help' => __(get_option('jqlb_help_text'), 'jqlb'),
 		'prevLinkTitle' => __('previous image', 'jqlb'),
@@ -114,7 +117,9 @@ function jqlb_js() {
 		'closeTitle' => __('close image gallery', 'jqlb'),
 		'image' => __('Image ', 'jqlb'),
 		'of' => __(' of ', 'jqlb'),
-		'download' => __('Download', 'jqlb')
+		'download' => __('Download', 'jqlb'),
+		'pause' => __('(pause slideshow)', 'jqlb'),
+		'play' => __('(play slideshow)', 'jqlb')
 	));
 }
 
@@ -248,6 +253,12 @@ _top: open the image in the full body of the window', 'jqlb') ?>"><?php _e('Targ
 			<td colspan="2">					
 				<input type="text" id="jqlb_resize_speed" name="jqlb_resize_speed" value="<?php echo intval(get_option('jqlb_resize_speed')) ?>" size="3" />
 				<label for="jqlb_resize_speed"><?php _e('Animation duration (in milliseconds) ', 'jqlb') ?></label>			
+			</td>
+		</tr>
+		<tr valign="baseline" colspan="2">
+			<td colspan="2">					
+				<input type="text" id="jqlb_slideshow_speed" name="jqlb_slideshow_speed" value="<?php echo intval(get_option('jqlb_slideshow_speed')) ?>" size="3" />
+				<label for="jqlb_slideshow_speed"><?php _e('Slideshow speed (in milliseconds). 0 to disable.', 'jqlb') ?></label>			
 			</td>
 		</tr>
 		<tr valign="baseline" colspan="2">			

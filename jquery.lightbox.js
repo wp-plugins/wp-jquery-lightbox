@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.3.4.2 - 2011-02-01
+ * Version 1.4 - 2013-02-02
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -57,12 +57,13 @@
             opts.isIE8 = isIE8(); // //http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
             opts.inprogress = false;
 			opts.auto = -1;
-            var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + opts.strings.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + opts.strings.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
-            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><span id="numberDisplay"></span></div><div id="bottomNav">';
+			var txt = opts.strings;
+            var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + txt.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + txt.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
+            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><p id="controls"><span id="numberDisplay"></span> <span id="downloadLink"><a href="" target="'+opts.linkTarget+'">' + txt.download + '</a></span></p></div><div id="bottomNav">';
             if (opts.displayHelp) {
-                imageData += '<span id="helpDisplay">' + opts.strings.help + '</span>';
+                imageData += '<span id="helpDisplay">' + txt.help + '</span>';
             }
-            imageData += '<a href="javascript://" id="bottomNavClose" title="' + opts.strings.closeTitle + '"><div id="jqlb_closelabel"></div></a></div></div></div>';
+            imageData += '<a href="javascript://" id="bottomNavClose" title="' + txt.closeTitle + '"><div id="jqlb_closelabel"></div></a></div></div></div>';
             var string;
             if (opts.navbarOnTop) {
                 string = '<div id="overlay"></div><div id="lightbox">' + imageData + outerImage + '</div>';
@@ -81,18 +82,8 @@
             if (!opts.imageClickClose) {
                 $("#lightboxImage").click(function () { return false; });
                 $("#hoverNav").click(function () { return false; });
-            }
-			
-			$("#caption").click(function() {
-				clearInterval(opts.auto);
-				opts.auto = setInterval(function(){console.log("p"); changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, 1000);
-				return false;
-			});		
-			console.log(opts.auto);
-        };
-		
-		
-		
+            }						
+        };	
         //allow image to reposition & scale if orientation change or resize occurs.
         function resizeListener(e) {
             if (opts.resizeTimeout) {
@@ -140,7 +131,6 @@
 			}	
             return new Array(xScroll, yScroll);
         };
-
 		function start(imageLink) {
             $("select, embed, object").hide();
             var arrayPageSize = getPageSize();
@@ -158,71 +148,52 @@
             }
             var imageNum = 0;  			
 			var images = [];
-			opts.downloads = {}; //to keep track of any custom download links
-			// if image is NOT part of a set..				
-			if (!imageLink.rel || (imageLink.rel == '')) {
-				// add single image to Lightbox.imageArray
-				//TODO: find out of this *ever* happens
-				var s = '';
-				var jqImg = $(this).children(':first-child');
-				if (imageLink.title) {
-					s = imageLink.title;
+			opts.downloads = {}; //to keep track of any custom download links		
+			$("a").each(function(){
+				if(!this.href || (this.rel != imageLink.rel)) {
+					return;
+				}
+				var title = '';
+				var caption = '';
+				var captionText = '';
+				var jqThis = $(this);
+				var jqImg = jqThis.children('img:first-child');
+				if (this.title) { //title of link
+					title = this.title;
 				} else if (jqImg.attr('title')) {
-					s = jqImg.attr('title');
+					title = jqImg.attr('title'); //grab the title from the image if the link lacks one
 				} else if(jqImg.attr('alt')){
 					title = jqImg.attr('alt'); //if neither link nor image have a title attribute
 				}
-				if(opts.displayDownloadLink || $(imageLink).attr("data-download")){							
-					opts.downloads[images.length] = $(imageLink).attr("data-download"); //use length as an index. convenient since it will always be unique							
+				if (jqThis.parent().next('.gallery-caption').html()) {
+					var jq = jqThis.parent().next('.gallery-caption');
+					caption = jq.html();
+					captionText = jq.text();
+				} else if (jqThis.next('.wp-caption-text').html()) {
+					caption = jqThis.next('.wp-caption-text').html();
+					captionText = jqThis.next('.wp-caption-text').text();
+				}
+				title = $.trim(title);
+				captionText = $.trim(captionText);
+				if (title.toLowerCase() == captionText.toLowerCase()) {
+					title = caption; //to keep linked captions
+					caption = ''; //but not duplicate the text								
+				}
+				var s = '';
+				if (title != '') {
+					s = '<span id="titleText">' + title + '</span>';
+				} 
+				if (caption != '') {
+					if (title != ''){
+						s += '<br />';
+					} 
+					s += '<span id="captionText">' + caption +'</span>';
 				}						
-				images.push(new Array(imageLink.href, opts.displayTitle ? s : ''));
-			} else {
-				// if image is part of a set..
-				$("a").each(function () {
-					if (this.href && (this.rel == imageLink.rel)) {
-						var title = '';
-						var caption = '';
-						var captionText = '';
-						var jqThis = $(this);
-						var jqImg = jqThis.children('img:first-child');
-						if (this.title) { //title of link
-							title = this.title;
-						} else if (jqImg.attr('title')) {
-							title = jqImg.attr('title'); //grab the title from the image if the link lacks one
-						} else if(jqImg.attr('alt')){
-							title = jqImg.attr('alt'); //if neither link nor image have a title attribute
-						}
-						if (jqThis.parent().next('.gallery-caption').html()) {
-							var jq = jqThis.parent().next('.gallery-caption');
-							caption = jq.html();
-							captionText = jq.text();
-						} else if (jqThis.next('.wp-caption-text').html()) {
-							caption = jqThis.next('.wp-caption-text').html();
-							captionText = jqThis.next('.wp-caption-text').text();
-						}
-						title = $.trim(title);
-						captionText = $.trim(captionText);
-						if (title.toLowerCase() == captionText.toLowerCase()) {
-							title = caption; //to keep linked captions
-							caption = ''; //but not duplicate the text								
-						}
-						var s = '';
-						if (title != '') {
-							s = '<span id="titleText">' + title + '</span>';
-						} 
-						if (caption != '') {
-							if (title != ''){
-								s += '<br />';
-							} 
-							s += '<span id="captionText">' + caption +'</span>';
-						}						
-						if(opts.displayDownloadLink || jqThis.attr("data-download")){							
-							opts.downloads[images.length] = jqThis.attr("data-download"); //use length as an index. convenient since it will always be unique							
-						}						
-						images.push(new Array(this.href, opts.displayTitle ? s : '', images.length));
-					}
-				});
-			}            
+				if(opts.displayDownloadLink || jqThis.attr("data-download")){							
+					opts.downloads[images.length] = jqThis.attr("data-download"); //use length as an index. convenient since it will always be unique							
+				}						
+				images.push(new Array(this.href, opts.displayTitle ? s : '', images.length));
+			});			            
             if (images.length > 1) {
                 for (i = 0; i < images.length; i++) {
                     for (j = images.length - 1; j > i; j--) {
@@ -238,15 +209,12 @@
             setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();
             changeImage(imageNum);
         };
-		
 		function setLightBoxPos(newTop, newLeft) {        
             if (opts.resizeSpeed > 0) {
-                $('#lightbox').animate({ top: newTop }, 250, 'linear');
-                return $('#lightbox').animate({ left: newLeft }, 250, 'linear');
+                return $('#lightbox').animate({ top: newTop+ 'px', left: newLeft+ 'px' }, 250, 'linear');                
             }
             return $('#lightbox').css({ top: newTop + 'px', left: newLeft + 'px' });
         }
-		
         function changeImage(imageNum) {
             if (opts.inprogress == false) {
                 opts.inprogress = true;
@@ -260,7 +228,6 @@
                 doChangeImage();
             }
         };
-
         function doChangeImage() {
             opts.imgPreloader = new Image();
             opts.imgPreloader.onload = function () {
@@ -270,7 +237,6 @@
             };
             opts.imgPreloader.src = opts.imageArray[opts.activeImage][0];
         };
-
         function doScale() {
             if (!opts.imgPreloader) {
                 return;
@@ -316,23 +282,17 @@
             opts.yScale = (heightNew / opts.heightCurrent) * 100;           
             setLightBoxPos(lightboxTop, lightboxLeft);                   
             updateDetails(); //toyNN: moved updateDetails() here, seems to work fine.    
-			$('#imageDataContainer').animate({ width: widthNew }, opts.resizeSpeed, 'linear');
-			$('#outerImageContainer').animate({ width: widthNew }, opts.resizeSpeed, 'linear', function () {
-				$('#outerImageContainer').animate({ height: heightNew }, opts.resizeSpeed, 'linear', function () {
-					showImage();
-				});
+			$('#imageDataContainer').animate({width:widthNew+"px"}, opts.resizeSpeed, 'linear');
+			$('#outerImageContainer').animate({width:widthNew+"px",height:heightNew+"px"}, opts.resizeSpeed, 'linear', function () {				
+					showImage();				
 			});
 			updateNav();
-            $('#prevLink').height(imgHeight);
-            $('#nextLink').height(imgHeight);
+            $('#prevLink,#nextLink').height(imgHeight);            
         };
-
         function showImage() {
             //assumes updateDetails have been called earlier!
             $("#imageData").show();
-            $('#caption').show();
-            //$('#imageDataContainer').slideDown(400);
-            //$("#imageDetails").hide().fadeIn(400);		
+            $('#caption').show();      	
             $('#jqlb_loading').hide();
             if (opts.resizeSpeed > 0) {
                 $('#lightboxImage').fadeIn("fast");
@@ -369,18 +329,34 @@
 			var downloadIndex = images[i][2];
             if (images[i][1]) {
                 $('#caption').html(images[i][1]).show();
-            }
-            var nav_html = '';           
-            var pos = (images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';
-            var link = '';
+            }        
+            var pos = (images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';            
+			if(opts.slidehowSpeed && images.length > 1){	
+				var pp = (opts.auto === -1) ? txt.play : txt.pause;
+				pos += ' <a id="playpause" href="#">' + pp + '</a>';				
+			}			
 			if(opts.displayDownloadLink || opts.downloads[downloadIndex]){
-				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 
-				link = (opts.displayDownloadLink) ? '<a href="' + url + '" id="downloadLink" target="'+opts.linkTarget+'">' + txt.download + '</a>' : '';
-			}     
-            nav_html = nav_html + pos + link;
-            if (nav_html != '') {
-                $('#numberDisplay').html(nav_html).show();
+				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 				
+				$('#downloadLink').show().children().attr("href", url);
+			}else{
+				$('#downloadLink').hide();
+			}			
+            if(pos != ''){
+                $('#numberDisplay').html(pos).show();
             }
+			if(opts.slidehowSpeed){				
+				$("#numberDisplay").off('click').click(function() {										
+					if(opts.auto != -1){
+						$(this).children("a").text(txt.play);
+						clearInterval(opts.auto);
+						opts.auto = -1;
+					}else{					
+						$(this).children("a").text(txt.pause);						
+						opts.auto = setInterval(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
+					}
+					return false;
+				});							
+			}
         };
         function updateNav() {
             if (opts.imageArray.length > 1) {
@@ -405,11 +381,11 @@
         function end() {
             disableKeyboardNav();
 			clearInterval(opts.auto);
+			opts.auto = -1;
             $('#lightbox').hide();
             $('#overlay').fadeOut();
             $('select, object, embed').show();
         };
-
         function keyboardAction(e) {
             var o = e.data.opts;
             var keycode = e.keyCode;
@@ -453,13 +429,16 @@
 })(jQuery);
 //you can call this manually at any time to activate the lightboxing. (useful for ajax-loaded content)
 function doLightBox(){
-	var ua = navigator.userAgent;
-	var haveConf = (typeof JQLBSettings == 'object');
+	var haveConf = (typeof JQLBSettings == 'object');	
+	var ss, rs, ms = 0;
+	if(haveConf && JQLBSettings.slideshowSpeed) {
+		 ss = parseInt(JQLBSettings.slideshowSpeed);
+	}
 	if(haveConf && JQLBSettings.resizeSpeed) {
-		JQLBSettings.resizeSpeed = parseInt(JQLBSettings.resizeSpeed);
+		rs = parseInt(JQLBSettings.resizeSpeed);
 	}
 	if(haveConf && JQLBSettings.marginSize){
-		JQLBSettings.marginSize = parseInt(JQLBSettings.marginSize);
+		ms = parseInt(JQLBSettings.marginSize);
 	}
 	var default_strings = {
 		help: ' Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.',
@@ -468,15 +447,18 @@ function doLightBox(){
 		closeTitle: 'close image gallery',
 		image: 'Image ',
 		of: ' of ',
-		download: 'Download'
+		download: 'Download',
+		pause: '(pause slideshow)',
+		play: '(play slideshow)'
 	};
 	jQuery('a[rel^="lightbox"]').lightbox({
 		adminBarHeight: jQuery('#wpadminbar').height() || 0,
 		linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
 		displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
-		marginSize: (haveConf && JQLBSettings.marginSize) ? JQLBSettings.marginSize : 0,
+		marginSize: (haveConf && ms) ? ms : 0,
 		fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,
-		resizeSpeed: (haveConf && JQLBSettings.resizeSpeed >= 0) ? JQLBSettings.resizeSpeed : 400,
+		resizeSpeed: (haveConf && rs >= 0) ? rs : 400,
+		slidehowSpeed: (haveConf && ss >= 0) ? ss : 4000,
 		displayDownloadLink: (haveConf && JQLBSettings.displayDownloadLink == '0') ? false : true,
 		navbarOnTop: (haveConf && JQLBSettings.navbarOnTop == '0') ? false : true,		
 		strings: (haveConf && typeof JQLBSettings.help == 'string') ? JQLBSettings : default_strings

@@ -2,9 +2,10 @@
 Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
-Requires at least: 3.4
-Tested up to: 3.4.1
+Requires at least: 3.5.1
+Tested up to: 3.5.1
 Stable tag: 1.3.4.2
+License: GPLv2 or later
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
 
@@ -16,6 +17,7 @@ Warren Krewenki [ported Lightbox to jQuery](http://warren.mesozen.com/jquery-lig
 
 This version is also [adjusted for mobile devices](http://wordpress.org/extend/plugins/wp-jquery-lightbox/screenshots/);
 
+* Swipe gestures for flicking between images on touch devices
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
 * Optional download link to display images in native app.
@@ -28,36 +30,17 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 *[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
 
-= 1.3.4.2 (2011-02-01) =
-* Fallbacks for people using older jQuery
-
-= 1.3.4.1 (2011-01-31) =
-* Updated deprecated jQuery calls (thanks; David Naber)
-
-= 1.3.4 (2011-12-29) =
-* Maybe fix for [mixed HTTP/HTTPS sites](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems)
-* [Support for query params in image links](http://wordpress.org/support/topic/automatic-lightbox-functionarity-failes-to-work-with-image-links?replies=2#post-2302997)
-* [Fixed button messup in Firefox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-broken-in-firefox?replies=9)
-* Fixed depth fight with the default twentyeleven theme header
-* [Fixed admin bar covering the lightbox](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-show-download-link-not-working?replies=4#post-2400784)
-* Added info on how to disable lightbox for specific links (bogus rel-attribute)
-* Added translations: [Romanian](http://wordpress.org/support/topic/wp-jquery-lightbox-romanian-translation?replies=1), [French](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-french-translation?replies=2#post-2187626) and [Hebrew](www.sagive.co.il)
-* Updated: Russian language icons (thanks; Ilya Gorenburg), [Japanese translation](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation-for-133?replies=1)
-
-= 1.3.3 (2011-06-12) =
-* Fixes [for Internet Explorer](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues) (A million thanks to [David Grayston](http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/#more-342)!).
-* Fix for [mixed HTTP/HTTPS installations](http://wordpress.org/support/topic/mixed-http-and-https-installation-problems).
-* Added setting to have margins to screen edge.
-* Added setting to put info & navigation on top.
-* Added setting for help text.
-* Added Japanese translation ([Thanks redcocker](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-japanese-translation)).
-
-= 1.3.2 (2011-05-16) =
-* Added support for auto-lightboxing comments too.
-* Added Russian and Czech translations (incl. images). Thanks again Denis!
-* Added Polish translation ([Thanks Fisiu](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-polish-localization?replies=1)).
-* Fixed fallbacks to avoid [breakage over JavaScript optimizers](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19#post-2091734).
-* Known issues: [1.3.x is garbage on IE7 and IE8](http://wordpress.org/support/topic/plugin-wp-jquery-lightbox-jquery-version-and-ie-issues?replies=3). I've got no clue and no time - **help appreciated!**
+= 1.4 (2013-02-02) =
+* Added swipe gestures on touch devices
+* Added slideshow 
+* Added support for multiple sets in one post (use: [`data-download`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
+* Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
+* Added support to pick text from the image ALT-attribute (if title is not available) 
+* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
+* Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
+* Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
+* Fix to support Infinite Scroll and similar
+* Fix leaky CSS on admin page
 
 = 1.3 (2011-05-01) =
 * Improved scaling to *maximize* display area.
@@ -78,13 +61,14 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 = How to Use: =
 1. With [WordPress built-in gallery](http://codex.wordpress.org/Gallery_Shortcode): [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
-1. By adding a `rel="lightbox"` attribute to any link:
+1. All galleries in a post make a single slideshow. To create separate slideshows, use `set`: `[gallery link="file" set="x"]`
+1. You can manually add a `rel="lightbox"` attribute to any link:
 
 	`<a href="image-1.jpg" rel="lightbox" title="my caption">image #1</a>`
 
 	Note the use of title-attribute to set a caption
 		
-1. To group sets of related images, follow step 2 but additionally include a group name in the `rel` attribute:
+1. To group sets of related images, follow step 3 but additionally include a group name in the `rel` attribute:
 	
 	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
 	
@@ -92,32 +76,45 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 	
 	`<a href="image-3.jpg" rel="lightbox[roadtrip]">image #3</a>`
 
+1. You can use the `data-download` attribute to set a custom download link:
+	
+	`<a href="image-medium.jpg" rel="lightbox" data-download="image-superlarge.jpg"> [...] </a>`
+	
 1. To *disable* lightboxing of an image link, just set any other rel-attribute: `rel="nobox"`
 	
-1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close.
+1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close. Swipe left / right on touch devices.
 
-1. To configure the download-link, set the `data-download` attribute:
-	`<a href="image-medium.jpg" rel="lightbox[]" data-download="image-superlarge.jpg"> [...] </a>`
-
-= For developers: =
-1. Always have `wp_footer();` just before the closing `</body>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
 1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
-1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
 
+= Trouble shooting: =
+If you have problems with WP jQuery Lightbox, please make sure you try these steps before asking for help. If you ask for help and I find any of these steps would fix the problem, I will just link you back here to do the work yourself.
+
+1. Make sure your site is not throwing any javascript errors. Use [your browsers javascript console](http://webmasters.stackexchange.com/questions/8525/how-to-open-the-javascript-console-in-different-browsers) to find out.
+
+If you're running a custom theme:
+1. Make sure you have [`wp_head();`](http://codex.wordpress.org/Function_Reference/wp_head) just before the closing `</head>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+1. For the same reason, always have `wp_footer();` just before the closing `</body>` tag of your theme.
+1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
 * If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
 * If you develop JavaScript optimizers for WordPress, please play nice with the default API...
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
+Lastly:
+1. Disable all other plugins, one at a time. Try the lightbox between each.
+1. Revert to the default theme. Did it help? Fix your theme.
+
+Still have problems? Post a link and describe what issue you're having.
+
 == Changelog ==
-= 1.3.5 (2013-xx-xx) =
-* Added swipe gestures on supporting devices
-* Added support for a 'set'-attribute to the gallery-shortcode.
+= 1.4 (2013-02-02) =
+* Added swipe gestures on touch devices
+* Added slideshow 
+* Added support for multiple sets in one post (use: 'set' with the gallery-shortcode)
+* Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
+* Added support to pick text from the image ALT-attribute (if title is not available) 
+* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
 * Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
 * Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
-* Added information on how to get lightbox to pick up texts from your media library
-* Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/).
-* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
-* Added support to pick text from the image ALT-attribute. 
 * Fix to support Infinite Scroll and similar
 * Fix leaky CSS on admin page
 
@@ -186,6 +183,9 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * Release.
 
 == Upgrade Notice ==
+= 1.4 =
+Swipe gestures, slideshow, sets and lots of fixes. Check your config screen after update!
+
 = 1.3.4.2 (2011-02-01) =
 * Fallbacks for people using older jQuery
 
@@ -229,6 +229,25 @@ First release.
 3. Lightbox, with device rotated. Image remains centered and as wide as possible.
 
 == Frequently Asked Questions ==
+
+= Troubleshooting: =
+If you have problems with WP jQuery Lightbox, please make sure you try these steps before asking for help. If you ask for help and I find any of these steps would fix the problem, I will just link you back here to do the work yourself.
+
+1. Make sure your site is not throwing any javascript errors. Use [your browsers javascript console](http://webmasters.stackexchange.com/questions/8525/how-to-open-the-javascript-console-in-different-browsers) to find out.
+
+If you're running a custom theme:
+1. Make sure you have [`wp_head();`](http://codex.wordpress.org/Function_Reference/wp_head) just before the closing `</head>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+1. For the same reason, always have `wp_footer();` just before the closing `</body>` tag of your theme.
+1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+* If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+* If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+* [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
+
+Lastly:
+1. Disable all other plugins, one at a time. Try the lightbox between each.
+1. Revert to the default theme. Did it help? Fix your theme.
+
+Still have problems? Post a link and describe what issue you're having.
 
 = Can the lightbox display the image description instead of the title? =
 WP jQuery Lightbox grabs texts from three different HTML nodes;

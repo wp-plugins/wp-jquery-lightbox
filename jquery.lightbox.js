@@ -90,7 +90,7 @@
                 clearTimeout(opts.resizeTimeout);
                 opts.resizeTimeout = false;
             }
-            opts.resizeTimeout = setTimeout(function () { doScale(false); }, 50); //a delay to avoid duplicate event calls.		
+            opts.resizeTimeout = setTimeout(function () { doScale(); }, 50); //a delay to avoid duplicate event calls.		
         }
         function getPageSize(){           
             var pgDocHeight = $(document).height();
@@ -204,9 +204,8 @@
                 }
                 while (images[imageNum][0] != imageLink.href) { imageNum++; }
             }
-            opts.imageArray = images;
-			// calculate top and left offset for the lightbox
-            setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();
+            opts.imageArray = images;			
+            setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();// calculate top and left offset for the lightbox
             changeImage(imageNum);
         };
 		function setLightBoxPos(newTop, newLeft) {        
@@ -282,8 +281,8 @@
             opts.yScale = (heightNew / opts.heightCurrent) * 100;           
             setLightBoxPos(lightboxTop, lightboxLeft);                   
             updateDetails(); //toyNN: moved updateDetails() here, seems to work fine.    
-			$('#imageDataContainer').animate({width:widthNew+"px"}, opts.resizeSpeed, 'linear');
-			$('#outerImageContainer').animate({width:widthNew+"px",height:heightNew+"px"}, opts.resizeSpeed, 'linear', function () {				
+			$('#imageDataContainer').animate({width:widthNew}, opts.resizeSpeed, 'linear');
+			$('#outerImageContainer').animate({width:widthNew,height:heightNew}, opts.resizeSpeed, 'linear', function () {				
 					showImage();				
 			});
 			updateNav();

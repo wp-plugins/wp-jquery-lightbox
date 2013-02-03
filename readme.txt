@@ -61,14 +61,18 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 = How to Use: =
 1. With [WordPress built-in gallery](http://codex.wordpress.org/Gallery_Shortcode): [`[gallery link="file"]`](http://codex.wordpress.org/Gallery_Shortcode)	
-1. All galleries in a post make a single slideshow. To create separate slideshows, use `set`: `[gallery link="file" set="x"]`
+1. All galleries in a post make a single slideshow. To create separate slideshows, use `group`: 
+
+	`[gallery link="file" ids="1,2,3" group="mon"]`
+	`[gallery link="file" ids="4,5,6" group="tue"]`
+
 1. You can manually add a `rel="lightbox"` attribute to any link:
 
 	`<a href="image-1.jpg" rel="lightbox" title="my caption">image #1</a>`
 
 	Note the use of title-attribute to set a caption
 		
-1. To group sets of related images, follow step 3 but additionally include a group name in the `rel` attribute:
+1. To manually group sets of related images, follow step 3 but additionally include a group name in the `rel` attribute:
 	
 	`<a href="image-1.jpg" rel="lightbox[roadtrip]">image #1</a>`
 	
@@ -84,7 +88,13 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 	
 1. Keyboard support: Arrows, P(revious)/N(ext) and X/C/ESC for close. Swipe left / right on touch devices.
 
-1. Apply lightbox to any content by running `jqlb_apply_lightbox($your_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
+1. [Infinite-Scroll](http://wordpress.org/extend/plugins/infinite-scroll/) and similar "endless pages"-plugins should call `doLightbox();` whenever it loads new content. Check your plugin for a setting 
+	named "callbacks" - code that is called after each new page is loaded. Add this line;
+	`if(typeof doLightBox !== 'undefined' && typeof jQuery !== 'undefined'){
+	   doLightBox();
+	}`
+
+1. On the server side you can apply lightbox to any content by running `jqlb_apply_lightbox($your_html_content, "any ID");` It returns a string with all image links lightboxed, grouped by `"any id"`.
 
 = Trouble shooting: =
 If you have problems with WP jQuery Lightbox, please make sure you try these steps before asking for help. If you ask for help and I find any of these steps would fix the problem, I will just link you back here to do the work yourself.
@@ -102,8 +112,9 @@ If you're running a custom theme:
 Lastly:
 1. Disable all other plugins, one at a time. Try the lightbox between each.
 1. Revert to the default theme. Did it help? Fix your theme.
+1. Search the forums for similar symptoms. 
 
-Still have problems? Post a link and describe what issue you're having.
+Still have problems? Post a link and describe what issue you're having, and tell us what of these steps you've already tried.
 
 == Changelog ==
 = 1.4 (2013-02-02) =

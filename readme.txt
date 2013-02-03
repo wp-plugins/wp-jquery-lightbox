@@ -206,7 +206,7 @@ Still have problems? Post a link and describe what issue you're having, and tell
 * Release.
 
 == Upgrade Notice ==
-= 1.4 =
+= 1.4.1 =
 Swipe gestures, slideshow, sets and lots of fixes. Check your config screen after update!
 
 = 1.3.4.2 (2011-02-01) =

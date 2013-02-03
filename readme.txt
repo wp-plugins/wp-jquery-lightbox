@@ -33,10 +33,10 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 = 1.4 (2013-02-02) =
 * Added swipe gestures on touch devices
 * Added slideshow 
-* Added support for multiple sets in one post (use: [`data-download`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
+* Added support for multiple sets in one post (use: [`group`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
 * Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 * Added support to pick text from the image ALT-attribute (if title is not available) 
-* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
+* Added translations: Norwegian Bokm&aring;l (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
 * Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
 * Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
 * Fix to support Infinite Scroll and similar
@@ -64,6 +64,7 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 1. All galleries in a post make a single slideshow. To create separate slideshows, use `group`: 
 
 	`[gallery link="file" ids="1,2,3" group="mon"]`
+	
 	`[gallery link="file" ids="4,5,6" group="tue"]`
 
 1. You can manually add a `rel="lightbox"` attribute to any link:
@@ -102,16 +103,25 @@ If you have problems with WP jQuery Lightbox, please make sure you try these ste
 1. Make sure your site is not throwing any javascript errors. Use [your browsers javascript console](http://webmasters.stackexchange.com/questions/8525/how-to-open-the-javascript-console-in-different-browsers) to find out.
 
 If you're running a custom theme:
+
 1. Make sure you have [`wp_head();`](http://codex.wordpress.org/Function_Reference/wp_head) just before the closing `</head>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+
 1. For the same reason, always have `wp_footer();` just before the closing `</body>` tag of your theme.
+
 1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+
 * If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+
 * If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 Lastly:
+
 1. Disable all other plugins, one at a time. Try the lightbox between each.
+
 1. Revert to the default theme. Did it help? Fix your theme.
+
 1. Search the forums for similar symptoms. 
 
 Still have problems? Post a link and describe what issue you're having, and tell us what of these steps you've already tried.
@@ -120,10 +130,10 @@ Still have problems? Post a link and describe what issue you're having, and tell
 = 1.4 (2013-02-02) =
 * Added swipe gestures on touch devices
 * Added slideshow 
-* Added support for multiple sets in one post (use: 'set' with the gallery-shortcode)
+* Added support for multiple sets in one post (use: [`group`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
 * Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 * Added support to pick text from the image ALT-attribute (if title is not available) 
-* Added translations: Norwegian Bokmål (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
+* Added translations: Norwegian Bokm&aring;l (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
 * Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
 * Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
 * Fix to support Infinite Scroll and similar
@@ -241,24 +251,34 @@ First release.
 
 == Frequently Asked Questions ==
 
-= Troubleshooting: =
+= Trouble shooting: =
 If you have problems with WP jQuery Lightbox, please make sure you try these steps before asking for help. If you ask for help and I find any of these steps would fix the problem, I will just link you back here to do the work yourself.
 
 1. Make sure your site is not throwing any javascript errors. Use [your browsers javascript console](http://webmasters.stackexchange.com/questions/8525/how-to-open-the-javascript-console-in-different-browsers) to find out.
 
 If you're running a custom theme:
+
 1. Make sure you have [`wp_head();`](http://codex.wordpress.org/Function_Reference/wp_head) just before the closing `</head>` tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files. 
+
 1. For the same reason, always have `wp_footer();` just before the closing `</body>` tag of your theme.
+
 1. Many JavaScript optimizers, combiners, minifiers, etc. conflict with [`wp_localize_script`](http://codex.wordpress.org/Function_Reference/wp_localize_script2), used to configure this plugin and many others.
+
 * If you have problems with jQuery Lightbox; first disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)
+
 * If you develop JavaScript optimizers for WordPress, please play nice with the default API...
+
 * [More info about this issue](http://wordpress.org/support/topic/122-worked-13-does-not-work-for-me?replies=19)
 
 Lastly:
+
 1. Disable all other plugins, one at a time. Try the lightbox between each.
+
 1. Revert to the default theme. Did it help? Fix your theme.
 
-Still have problems? Post a link and describe what issue you're having.
+1. Search the forums for similar symptoms. 
+
+Still have problems? Post a link and describe what issue you're having, and tell us what of these steps you've already tried.
 
 = Can the lightbox display the image description instead of the title? =
 WP jQuery Lightbox grabs texts from three different HTML nodes;

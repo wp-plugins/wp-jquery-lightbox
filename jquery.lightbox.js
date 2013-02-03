@@ -344,7 +344,7 @@
                 $('#numberDisplay').html(pos).show();
             }
 			if(opts.slidehowSpeed){				
-				$("#numberDisplay").off('click').click(function() {										
+				$("#numberDisplay").unbind('click').click(function() {										
 					if(opts.auto != -1){
 						$(this).children("a").text(txt.play);
 						clearInterval(opts.auto);

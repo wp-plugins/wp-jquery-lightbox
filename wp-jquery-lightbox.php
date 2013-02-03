@@ -95,7 +95,7 @@ function jqlb_css(){
 }
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
-	wp_enqueue_script('jquery', '', array(), null, true);
+	wp_enqueue_script('jquery', '', array(), false, true);
 	wp_enqueue_script('wp-jquery-lightbox-swipe', plugins_url(JQLB_TOUCH_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);	
 	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(

@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
@@ -30,16 +30,17 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 
 *[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
 
-= 1.4 (2013-02-02) =
+= 1.4.1 (2013-02-03) =
 * Added swipe gestures on touch devices
 * Added slideshow 
 * Added support for multiple sets in one post (use: [`group`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
 * Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 * Added support to pick text from the image ALT-attribute (if title is not available) 
 * Added translations: Norwegian Bokm&aring;l (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
-* Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
-* Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
-* Fix to support Infinite Scroll and similar
+* Fix regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
+* Fix changed common IDs to avoid collisions. (you'll have to update your CSS now!) (Hat tip; Pollmann Frederic)
+* Fix better support of Infinite Scroll and similar
+* Fix toggling visible state on unrelated object, embed and select nodes. [mwolfe02](http://wordpress.org/support/topic/lightbox-shows-hidden-selectembedobject-blocks?replies=1)
 * Fix leaky CSS on admin page
 
 = 1.3 (2011-05-01) =
@@ -127,16 +128,17 @@ Lastly:
 Still have problems? Post a link and describe what issue you're having, and tell us what of these steps you've already tried.
 
 == Changelog ==
-= 1.4 (2013-02-02) =
+= 1.4.1 (2013-02-03) =
 * Added swipe gestures on touch devices
 * Added slideshow 
 * Added support for multiple sets in one post (use: [`group`](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/) with the gallery-shortcode)
 * Added support for arbitrary Download links via the [`data-download`-attribute](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
 * Added support to pick text from the image ALT-attribute (if title is not available) 
 * Added translations: Norwegian Bokm&aring;l (thanks [Ole Martin Kristiansen](http://hvorerole.com/)!)
-* Updated regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
-* Replaced two CSS selector names to avoid collisions. (Hat tip; Pollmann Frederic)
-* Fix to support Infinite Scroll and similar
+* Fix regexp to deal with urls like www.gif.org. (Thanks Yannick Berker!)
+* Fix changed common IDs to avoid collisions. (you'll have to update your CSS now!) (Hat tip; Pollmann Frederic)
+* Fix better support of Infinite Scroll and similar
+* Fix toggling visible state on unrelated object, embed and select nodes. [mwolfe02](http://wordpress.org/support/topic/lightbox-shows-hidden-selectembedobject-blocks?replies=1)
 * Fix leaky CSS on admin page
 
 = 1.3.4.2 (2011-02-01) =

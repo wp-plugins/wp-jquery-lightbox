@@ -132,7 +132,7 @@
             return new Array(xScroll, yScroll);
         };
 		function start(imageLink) {
-            $("select, embed, object").hide();
+           // $("select, embed, object").hide();
             var arrayPageSize = getPageSize();
             var arrayPagePos = getPageScroll();
             var newTop = 0;
@@ -383,7 +383,7 @@
 			opts.auto = -1;
             $('#lightbox').hide();
             $('#overlay').fadeOut();
-            $('select, object, embed').show();
+           // $('select, object, embed').show();
         };
         function keyboardAction(e) {
             var o = e.data.opts;

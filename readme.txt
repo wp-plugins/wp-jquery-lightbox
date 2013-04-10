@@ -327,3 +327,20 @@ Indeed you can!
 Translations and help with implementing them would be nice. A read through and comments on my WordPress API usage would also be most welcome, as I'm not really able to keep on top of the frequent WordPress releases anymore.
 
 And of course; [a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x) always brightens my day! (used ones are fine!) 
+
+== Other Notes ==
+Copyright (C) 2010-2013 Ulf Benjaminsson (my first name at ulfben dot com).
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA

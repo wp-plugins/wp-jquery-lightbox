@@ -131,7 +131,7 @@ function jqlb_lightbox_comment($comment){
 function jqlb_autoexpand_rel_wlightbox($content) {
 	if(get_option('jqlb_automate') == 1){
 		global $post;	
-		$id = ($post->ID) ? $post->ID : -1;
+		$id = isset($post->ID) ? $post->ID : -1;
 		$content = jqlb_do_regexp($content, $id);
 	}			
 	return $content;

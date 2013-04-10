@@ -12,7 +12,6 @@ $author_site = 'http://www.ulfben.com/';
 $author_profile = 'http://profiles.wordpress.org/users/ulfben/';
 ?>
 <script type="text/javascript">
-/* <![CDATA[ */
 (function() {
 	var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
 	s.type = 'text/javascript';
@@ -20,7 +19,6 @@ $author_profile = 'http://profiles.wordpress.org/users/ulfben/';
 	s.src = '<?php echo $flattr_api; ?>';
 	t.parentNode.insertBefore(s, t);
 })();
-/* ]]> */
 </script>
 <style type="text/css">
 	#about{ float: right; width:350px; background: #ffc; border: 1px solid #333; padding: 5px; text-align: justify; font-family:verdana; font-size:11px; }

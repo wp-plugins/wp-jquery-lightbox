@@ -1,11 +1,13 @@
 /**
  * WP jQuery Lightbox
- * Version 1.4 - 2013-02-02
+ * Version 1.4.5 - 2013-06-09
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
  * plugin (http://wordpress.org/extend/plugins/wp-jquery-lightbox/)
  *  Modifications include:
+ *	. added slideshow
+ *	. added swipe-support
  *	. added "support" for WordPress admin bar.
  *	. improved the resizing code to respect aspect ratio
  *	. improved scaling routines to maximize images while taking captions into account
@@ -34,7 +36,22 @@
  **/
  /** toyNN: davidtg@comtrya.com: fixed IE7-8 incompatabilities in 1.3.* branch **/ 
 (function($){
-    $.fn.lightbox = function(options) {
+	//http://stackoverflow.com/a/16187766/347764	
+	function versionCompare(a, b){ 	
+		var i, l, d;
+		a = a.split('.');
+		b = b.split('.');
+		l = Math.min(a.length, b.length);
+		for (i=0; i<l; i++) {
+			d = parseInt(a[i], 10) - parseInt(b[i], 10);
+			if (d !== 0) {
+				return d;
+			}
+		}
+		return a.length - b.length;
+	}
+
+    $.fn.lightbox = function(options) {			
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
 		if($("#overlay").is(':visible')){//to resize the overlay whenever doLightbox is invoked
 			$(window).trigger('resize'); //we need this to deal with InfiniteScroll and similar.
@@ -44,7 +61,7 @@
             start(this);
             return false;
         }	
-		if(parseFloat($().jquery) >= 1.7){
+		if(versionCompare($.fn.jquery, '1.7') > 0){			
 			return $(this).on("click", onClick);
         }else{
 			return $(this).live("click", onClick); //deprecated since 1.7
@@ -82,7 +99,7 @@
             if (!opts.imageClickClose) {
                 $("#lightboxImage").click(function () { return false; });
                 $("#hoverNav").click(function () { return false; });
-            }						
+            }			
         };	
         //allow image to reposition & scale if orientation change or resize occurs.
         function resizeListener(e) {
@@ -174,7 +191,7 @@
 					captionText = jqThis.next('.wp-caption-text').text();
 				}
 				title = $.trim(title);
-				captionText = $.trim(captionText);
+				captionText = $.trim(captionText).replace('&#8217;', '&#039;').replace('’', '\''); //http://nickjohnson.com/b/wordpress-apostrophe-vs-right-single-quote
 				if (title.toLowerCase() == captionText.toLowerCase()) {
 					title = caption; //to keep linked captions
 					caption = ''; //but not duplicate the text								
@@ -207,6 +224,7 @@
             opts.imageArray = images;			
             setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();// calculate top and left offset for the lightbox
             changeImage(imageNum);
+			setNav();
         };
 		function setLightBoxPos(newTop, newLeft) {        
             if (opts.resizeSpeed > 0) {
@@ -215,24 +233,25 @@
             return $('#lightbox').css({ top: newTop + 'px', left: newLeft + 'px' });
         }
         function changeImage(imageNum) {
-            if (opts.inprogress == false) {
-                opts.inprogress = true;
-                opts.activeImage = imageNum;
-                // hide elements during transition
-                $('#jqlb_loading').show();
-                $('#lightboxImage').hide();
-                $('#hoverNav').hide();
-                $('#prevLink').hide();
-                $('#nextLink').hide();
-                doChangeImage();
-            }
+            if (opts.inprogress != false) {
+				return;
+			}
+			opts.inprogress = true;
+			opts.activeImage = imageNum;
+			// hide elements during transition
+			$('#jqlb_loading').show();
+			$('#lightboxImage').hide();
+			$('#hoverNav').hide();
+			$('#prevLink').hide();
+			$('#nextLink').hide();
+			doChangeImage();            
         };
         function doChangeImage() {
             opts.imgPreloader = new Image();
             opts.imgPreloader.onload = function () {
                 $('#lightboxImage').attr('src', opts.imageArray[opts.activeImage][0]);
                 doScale();  // once image is preloaded, resize image container
-                preloadNeighborImages();
+                preloadNeighborImages();				
             };
             opts.imgPreloader.src = opts.imageArray[opts.activeImage][0];
         };
@@ -250,7 +269,11 @@
 			if (opts.fitToScreen){
 				var displayHeight = maxHeight-opts.marginSize;	
 				var displayWidth = maxWidth-opts.marginSize;	
-                var ratio = 1;
+				if($(window).width() > 500){ //high rez display
+					displayHeight -= opts.marginSize;
+					displayWidth -= opts.marginSize;
+				}				
+				var ratio = 1;
                 if (newHeight > displayHeight) {
                     ratio = displayHeight / newHeight; //ex. 600/1024 = 0.58					
                 }
@@ -274,7 +297,7 @@
         function resizeImageContainer(imgWidth, imgHeight, lightboxTop, lightboxLeft) {
             opts.widthCurrent = $("#outerImageContainer").outerWidth();
             opts.heightCurrent = $("#outerImageContainer").outerHeight();
-            var widthNew = Math.max(350, imgWidth + (opts.borderSize * 2));
+            var widthNew = Math.max(300, imgWidth + (opts.borderSize * 2)); //300 = iphone. http://wordpress.org/support/topic/image-not-resized-correctly-with-wptouch?replies=6#post-4205735
             var heightNew = (imgHeight + (opts.borderSize * 2));
             // scalars based on change from old to new
             opts.xScale = (widthNew / opts.widthCurrent) * 100;
@@ -285,7 +308,11 @@
 			$('#outerImageContainer').animate({width:widthNew,height:heightNew}, opts.resizeSpeed, 'linear', function () {				
 					showImage();				
 			});
-			updateNav();
+			if (opts.imageArray.length > 1) {
+                $('#hoverNav').show();      
+				$('#prevLink').show();
+				$('#nextLink').show();			
+            }
             $('#prevLink,#nextLink').height(imgHeight);            
         };
         function showImage() {
@@ -294,12 +321,23 @@
             $('#caption').show();      	
             $('#jqlb_loading').hide();
             if (opts.resizeSpeed > 0) {
-                $('#lightboxImage').fadeIn("fast");
+                $('#lightboxImage').fadeIn("fast", function(){
+					onImageVisible();
+				});
             } else {
                 $('#lightboxImage').show();
+				onImageVisible();
             }
             opts.inprogress = false;
         };
+		
+		function onImageVisible(){
+			if(opts.auto != -1){				
+				clearTimeout(opts.auto); //in case we came here after mouse/keyboard interaction
+				opts.auto = setTimeout(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
+			}			
+			enableKeyboardNav();				
+		}
 		
 		function preloadNeighborImages() {
             if (opts.imageArray.length > 1) {
@@ -326,10 +364,10 @@
 			var txt = opts.strings;
 			var i = opts.activeImage;
 			var downloadIndex = images[i][2];
-            if (images[i][1]) {
+            if (images[i][1] && opts.showInfo) {
                 $('#caption').html(images[i][1]).show();
             }        
-            var pos = (images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';            
+            var pos = (images.length > 1 && opts.showInfo) ? txt.image + (i + 1) + txt.of + images.length : '';            
 			if(opts.slidehowSpeed && images.length > 1){	
 				var pp = (opts.auto === -1) ? txt.play : txt.pause;
 				pos += ' <a id="playpause" href="#">' + pp + '</a>';				
@@ -342,44 +380,43 @@
 			}			
             if(pos != ''){
                 $('#numberDisplay').html(pos).show();
-            }
-			if(opts.slidehowSpeed){				
-				$("#numberDisplay").unbind('click').click(function() {										
-					if(opts.auto != -1){
-						$(this).children("a").text(txt.play);
-						clearInterval(opts.auto);
-						opts.auto = -1;
-					}else{					
-						$(this).children("a").text(txt.pause);						
-						opts.auto = setInterval(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
-					}
-					return false;
-				});							
-			}
-        };
-        function updateNav() {
-            if (opts.imageArray.length > 1) {
-                $('#hoverNav').show();      
-				$('#prevLink').show().click(function () {
+            }			
+        };	
+        function setNav() {
+            if (opts.imageArray.length > 1) {                
+				$('#prevLink').click(function () {
 					changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); return false;
 				});
-				$('#nextLink').show().click(function () {
+				$('#nextLink').click(function () {
 					changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); return false;
 				});
 				if($.fn.touchwipe){
 					$('#imageContainer').touchwipe({
-						 wipeLeft: function() { changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); },
-						 wipeRight: function() { changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); },					
-						 min_move_x: 20,				
-						 preventDefaultEvents: true
+						wipeLeft: function() { changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1); },
+						wipeRight: function() { changeImage((opts.activeImage == 0) ? (opts.imageArray.length - 1) : opts.activeImage - 1); },												 
+						min_move_x: 20,				
+						preventDefaultEvents: true
 					});
+				}
+				if(opts.slidehowSpeed){				
+					$("#numberDisplay").unbind('click').click(function() {										
+						if(opts.auto != -1){
+							$(this).children("a").text(opts.strings.play);							
+							clearTimeout(opts.auto);							
+							opts.auto = -1;
+						}else{											
+							$(this).children("a").text(opts.strings.pause);						
+							opts.auto = setTimeout(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
+						}
+						return false;
+					});							
 				}
                 enableKeyboardNav();
             }
         };
         function end() {
             disableKeyboardNav();
-			clearInterval(opts.auto);
+			clearTimeout(opts.auto);
 			opts.auto = -1;
             $('#lightbox').hide();
             $('#overlay').fadeOut();
@@ -401,15 +438,17 @@
             }          
             return false;
         };
+						
         function enableKeyboardNav() {			
-			$(document).bind('keydown', {opts: opts}, keyboardAction);
+			$(document).unbind('keydown').bind('keydown', {opts: opts}, keyboardAction);
         };
         function disableKeyboardNav() {
             $(document).unbind('keydown');
         };
     };    
     $.fn.lightbox.defaults = {
-		adminBarHeight:28,
+		showInfo:false,
+		adminBarHeight:0, //28
         overlayOpacity: 0.8,
         borderSize: 10,
         imageArray: new Array,
@@ -453,6 +492,7 @@ function doLightBox(){
 	jQuery('a[rel^="lightbox"]').lightbox({
 		adminBarHeight: jQuery('#wpadminbar').height() || 0,
 		linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
+		showInfo: (haveConf && JQLBSettings.showInfo == '0') ? false : true,
 		displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
 		marginSize: (haveConf && ms) ? ms : 0,
 		fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,

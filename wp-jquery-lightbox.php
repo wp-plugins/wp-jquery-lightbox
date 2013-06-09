@@ -3,7 +3,7 @@
 Plugin Name: wp-jquery-lightbox
 Plugin URI: http://wordpress.org/extend/plugins/wp-jquery-lightbox/
 Description: A drop in replacement for LightBox-2 and similar plugins. Uses jQuery to save you from the JS-library mess in your header. :)
-Version: 1.4.1
+Version: 1.4.5
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPLv2 or later
@@ -50,6 +50,7 @@ function jqlb_add_admin_footer(){ //shows some plugin info in the footer of the 
 }	
 function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_automate', 'jqlb_bool_intval'); 
+	register_setting( 'jqlb-settings-group', 'jqlb_showinfo', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_comments', 'jqlb_bool_intval'); 
 	register_setting( 'jqlb-settings-group', 'jqlb_resize_on_demand', 'jqlb_bool_intval');
 	register_setting( 'jqlb-settings-group', 'jqlb_show_download', 'jqlb_bool_intval');
@@ -60,6 +61,7 @@ function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_help_text');
 	register_setting( 'jqlb-settings-group', 'jqlb_link_target');	
 	add_option('jqlb_help_text', '');
+	add_option('jqlb_showinfo', 1);
 	add_option('jqlb_link_target', '_self');
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
 	add_option('jqlb_comments', 1);
@@ -93,12 +95,14 @@ function jqlb_css(){
 	}
 	wp_enqueue_style('jquery.lightbox.min.css', plugin_dir_url(__FILE__).'styles/'.$fileName, false, '1.4');	
 }
+
 function jqlb_js() {			   	
 	if(is_admin() || is_feed()){return;}
 	wp_enqueue_script('jquery', '', array(), false, true);
 	wp_enqueue_script('wp-jquery-lightbox-swipe', plugins_url(JQLB_TOUCH_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);	
 	wp_enqueue_script('wp-jquery-lightbox', plugins_url(JQLB_SCRIPT, __FILE__),  Array('jquery'), '1.4', true);
 	wp_localize_script('wp-jquery-lightbox', 'JQLBSettings', array(
+		'showInfo'	=> get_option('jqlb_showinfo'),
 		'fitToScreen' => get_option('jqlb_resize_on_demand'),
 		'resizeSpeed' => get_option('jqlb_resize_speed'),
 		'displayDownloadLink' => get_option('jqlb_show_download'),
@@ -204,7 +208,14 @@ function jqlb_options_panel(){
 					<label for="jqlb_comments" title="<?php _e('Note: this will disable the nofollow-attribute of comment links, that otherwise interfere with the lightbox.', 'jqlb') ?>"> <?php _e('Enable lightbox in comments (disables <a href="http://codex.wordpress.org/Nofollow">the nofollow attribute!</a>)', 'jqlb') ?></label>
 				</td>
 			</tr>
-			<tr valign="baseline" colspan="2">
+			<tr>
+			<td>
+					<?php $check = get_option('jqlb_showinfo') ? ' checked="yes" ' : ''; ?>
+					<input type="checkbox" id="jqlb_showinfo" name="jqlb_showinfo" value="1" <?php echo $check; ?> />
+					<label for="jqlb_showinfo"> <?php _e('Show title & caption', 'jqlb') ?> </label>
+				</td>
+			</tr>
+			<tr valign="baseline" colspan="2">				
 				<td>
 					<?php $check = get_option('jqlb_show_download') ? ' checked="yes" ' : ''; ?>
 					<input type="checkbox" id="jqlb_show_download" name="jqlb_show_download" value="1" <?php echo $check; ?> />

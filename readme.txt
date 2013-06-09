@@ -40,6 +40,7 @@ If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please h
 * Fix: support for latest jQuery
 * Fix: WordPress encoding wrong quote mark in captions, causing duplicate texts to display.
 
+
 = 1.4.1 (2013-02-03) =
 * Added swipe gestures on touch devices
 * Added slideshow 
@@ -147,6 +148,7 @@ Still have problems? Post a link and describe what issue you're having, and tell
 * Fix: slideshow now waits for images to display before starting timer.
 * Fix: support for latest jQuery
 * Fix: WordPress encoding wrong quote mark in captions, causing duplicate texts to display.
+
 
 = 1.4.1 (2013-02-03) =
 * Added swipe gestures on touch devices

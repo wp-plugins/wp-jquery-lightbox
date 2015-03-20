@@ -76,7 +76,7 @@
 			opts.auto = -1;
 			var txt = opts.strings;
             var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + txt.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + txt.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
-            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="caption"></span><p id="controls"><span id="numberDisplay"></span> <span id="downloadLink"><a href="" target="'+opts.linkTarget+'">' + txt.download + '</a></span></p></div><div id="bottomNav">';
+            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="titleAndCaption"></span><p id="controls"><span id="numberDisplay"></span> <span id="downloadLink"></span></p></div><div id="bottomNav">';
             if (opts.displayHelp) {
                 imageData += '<span id="helpDisplay">' + txt.help + '</span>';
             }
@@ -114,8 +114,10 @@
             if (opts.isIE8 && pgDocHeight > 4096) {
                 pgDocHeight = 4096;
             }
-			var viewportHeight = $(window).height() - opts.adminBarHeight;			
-			//$(document).width() returns width of HTML document
+			var viewportHeight = $(window).height() - opts.adminBarHeight;
+			//var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+			//var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+			//$(document).width() returns width of HTML document			
             return new Array($(document).width(), pgDocHeight, $(window).width(), viewportHeight, $(document).height());
         };
         //code for IE8 check provided by http://kangax.github.com/cft/
@@ -170,46 +172,24 @@
 				if(!this.href || (this.rel != imageLink.rel)) {
 					return;
 				}
-				var title = '';
-				var caption = '';
-				var captionText = '';
 				var jqThis = $(this);
-				var jqImg = jqThis.children('img:first-child');
-				if (this.title) { //title of link
-					title = this.title;
-				} else if (jqImg.attr('title')) {
-					title = jqImg.attr('title'); //grab the title from the image if the link lacks one
-				} else if(jqImg.attr('alt')){
-					title = jqImg.attr('alt'); //if neither link nor image have a title attribute
+				var title = opts.showTitle ? getTitle(jqThis) : '';
+				var caption = opts.showCaption ? getCaption(jqThis) : {html:'',text:''};							
+				if(opts.showTitle && title.toLowerCase() == caption.text.toLowerCase()) {
+					title = caption.html; //to keep linked captions
+					caption.html = ''; //but not duplicate the text								
 				}
-				if (jqThis.parent().next('.gallery-caption').html()) {
-					var jq = jqThis.parent().next('.gallery-caption');
-					caption = jq.html();
-					captionText = jq.text();
-				} else if (jqThis.next('.wp-caption-text').html()) {
-					caption = jqThis.next('.wp-caption-text').html();
-					captionText = jqThis.next('.wp-caption-text').text();
-				}
-				title = $.trim(title);
-				captionText = $.trim(captionText).replace('&#8217;', '&#039;').replace('’', '\''); //http://nickjohnson.com/b/wordpress-apostrophe-vs-right-single-quote
-				if (title.toLowerCase() == captionText.toLowerCase()) {
-					title = caption; //to keep linked captions
-					caption = ''; //but not duplicate the text								
-				}
-				var s = '';
-				if (title != '') {
-					s = '<span id="titleText">' + title + '</span>';
-				} 
-				if (caption != '') {
-					if (title != ''){
-						s += '<br />';
-					} 
-					s += '<span id="captionText">' + caption +'</span>';
-				}						
+				console.log('title: "' + title + '"\ncaption html: "' + caption.html + '"\ncaption text: "' + caption.text+'"');
+				var s= (title != '') 				? '<span id="titleText">' + title + '</span>' 			: '';					
+				s 	+= (title != '' && caption.html)? '<br />' 												: '';
+				s 	+= (caption.html != '') 		? '<span id="captionText">' + caption.html +'</span>' 	: '';
+				
+				console.log('markup: "' + s + '"\n');
+				
 				if(opts.displayDownloadLink || jqThis.attr("data-download")){							
 					opts.downloads[images.length] = jqThis.attr("data-download"); //use length as an index. convenient since it will always be unique							
 				}						
-				images.push(new Array(this.href, opts.displayTitle ? s : '', images.length));
+				images.push(new Array(this.href, s, images.length));
 			});			            
             if (images.length > 1) {
                 for (i = 0; i < images.length; i++) {
@@ -226,12 +206,37 @@
             changeImage(imageNum);
 			setNav();
         };
+		function getTitle(jqLink){						
+			var title = jqLink.attr("title") || ''; //title of link //TODO, this is wrong
+			if(!title){
+				var jqImg = jqLink.children('img:first-child');
+				if (jqImg.attr('title')) {
+					title = jqImg.attr('title'); //grab the title from the image if the link lacks one
+				} else if(jqImg.attr('alt')){
+					title = jqImg.attr('alt'); //if neither link nor image have a title attribute
+				}
+			}
+			return $.trim(title);
+		}
+		function getCaption(jqLink){
+			var caption = {html:'',text:''};
+			if (jqLink.parent().next('.gallery-caption').html()) {
+				var jq = jqLink.parent().next('.gallery-caption');
+				caption.html = jq.html(); //holds html, links etc
+				caption.text = jq.text(); //plain-text
+			} else if (jqLink.next('.wp-caption-text').html()) {
+				caption.html = jqLink.next('.wp-caption-text').html();
+				caption.text = jqLink.next('.wp-caption-text').text();
+			}
+			caption.text = $.trim(caption.text).replace('&#8217;', '&#039;').replace('’', '\'').replace('…', '...');//http://nickjohnson.com/b/wordpress-apostrophe-vs-right-single-quote
+			return caption;			
+		}
 		function setLightBoxPos(newTop, newLeft) {        
             if (opts.resizeSpeed > 0) {
                 return $('#lightbox').animate({ top: newTop+ 'px', left: newLeft+ 'px' }, 250, 'linear');                
             }
             return $('#lightbox').css({ top: newTop + 'px', left: newLeft + 'px' });
-        }
+        };
         function changeImage(imageNum) {
             if (opts.inprogress != false) {
 				return;
@@ -318,7 +323,7 @@
         function showImage() {
             //assumes updateDetails have been called earlier!
             $("#imageData").show();
-            $('#caption').show();      	
+            $('#titleAndCaption').show();      	
             $('#jqlb_loading').hide();
             if (opts.resizeSpeed > 0) {
                 $('#lightboxImage').fadeIn("fast", function(){
@@ -359,22 +364,22 @@
 
         function updateDetails() {
             $('#numberDisplay').html('');
-            $('#caption').html('').hide();
+            $('#titleAndCaption').html('').hide();
 			var images = opts.imageArray;
 			var txt = opts.strings;
 			var i = opts.activeImage;
 			var downloadIndex = images[i][2];
-            if (images[i][1] && opts.showInfo) {
-                $('#caption').html(images[i][1]).show();
+            if(images[i][1] != ''){
+                $('#titleAndCaption').html(images[i][1]).show();
             }        
-            var pos = (images.length > 1 && opts.showInfo) ? txt.image + (i + 1) + txt.of + images.length : '';            
+            var pos = (images.length > 1 && opts.showCaption) ? txt.image + (i + 1) + txt.of + images.length : '';            
 			if(opts.slidehowSpeed && images.length > 1){	
 				var pp = (opts.auto === -1) ? txt.play : txt.pause;
 				pos += ' <a id="playpause" href="#">' + pp + '</a>';				
 			}			
 			if(opts.displayDownloadLink || opts.downloads[downloadIndex]){
 				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 				
-				$('#downloadLink').show().children().attr("href", url);
+				$('#downloadLink').empty().append($('<a>').attr('href', url).attr('download', '').text(txt.download)).show();
 			}else{
 				$('#downloadLink').hide();
 			}			
@@ -447,7 +452,7 @@
         };
     };    
     $.fn.lightbox.defaults = {
-		showInfo:false,
+		showCaption:false,
 		adminBarHeight:0, //28
         overlayOpacity: 0.8,
         borderSize: 10,
@@ -458,7 +463,7 @@
         heightCurrent: 250,
         xScale: 1,
         yScale: 1,
-        displayTitle: true,       
+        showTitle: true,       
         imageClickClose: true,
         followScroll: false,
         isIE8: false  //toyNN:internal value only
@@ -492,7 +497,8 @@ function doLightBox(){
 	jQuery('a[rel^="lightbox"]').lightbox({
 		adminBarHeight: jQuery('#wpadminbar').height() || 0,
 		linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
-		showInfo: (haveConf && JQLBSettings.showInfo == '0') ? false : true,
+		showCaption: (haveConf && JQLBSettings.showCaption == '0') ? false : true,
+		showTitle: (haveConf && JQLBSettings.showTitle == '0') ? false : true,
 		displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
 		marginSize: (haveConf && ms) ? ms : 0,
 		fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,

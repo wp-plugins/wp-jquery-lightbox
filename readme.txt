@@ -1,9 +1,9 @@
 === WP jQuery Lightbox ===
 Contributors: ulfben
-Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
+Donate link: http://flattr.com/thing/367557/Support-my-WordPress-plugins
 Tags: lightbox, jquery, nodal, image, display, ulfben
-Requires at least: 3.5.1
-Tested up to: 3.5.1
+Requires at least: 3.9
+Tested up to: 4.1.1
 Stable tag: 1.4.5
 License: GPLv2 or later
 
@@ -26,9 +26,23 @@ See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://
 
 You can browse images with your keyboard: Arrows, P(revious)/N(ext) and X/C/ESC for close.
 
-If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
+If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), there's several ways you can help me out; 
 
-*[//Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
+* Help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)
+* or [sign up to Microsoft OneDrive using my referral link](https://onedrive.live.com?invref=b1f728851abada15&invsrc=90) - we both get 0.5GB extra for free!
+* or [sign up to RealPlayer Cloud using my referral link](https://cloud.real.com/r/UzKHSP) - we both get 1GB extra for free! 
+* get me anything from [my Amazon whislisth](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10) (used items are OK!)
+
+Any help is greatly appreciated. Thanks!
+
+*[//Ulf Benjaminsson](http://www.ulfben.com)*
+
+= 1.4.6 (2015-03-20) =
+* "Download link" now correctly starts download instead of displaying the file
+* Title and Captions can be turned on / off individually
+* Enabled custom style sheets (just copy original to your theme's style folder, and hack away)
+* Added specific CSS selectors for title and captions
+
 
 = 1.4.5 (2013-06-09) =
 * Fit to screen edge on low rez displays (<500px)

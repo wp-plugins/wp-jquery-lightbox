@@ -70,15 +70,6 @@ Any help is greatly appreciated. Thanks!
 * Fix toggling visible state on unrelated object, embed and select nodes. [mwolfe02](http://wordpress.org/support/topic/lightbox-shows-hidden-selectembedobject-blocks?replies=1)
 * Fix leaky CSS on admin page
 
-= 1.3 (2011-05-01) =
-* Improved scaling to *maximize* display area.
-* Supports orientation / resize changes - Lightbox reflows with site. 
-* Added translation support (Thanks; [Martin S](http://sukimashita.com/) & Denis N. Voituk).
-* Added option to display download link.
-* Added support for disabling all animations (set duration to 0).
-* Fixed "duration" not having an effect.
-* [For Developers: public method to apply Lightbox to any string.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/installation/)
-
 [Older changelogs moved here.](http://wordpress.org/extend/plugins/wp-jquery-lightbox/changelog/)
 
 == Installation ==
@@ -155,6 +146,16 @@ Lastly:
 Still have problems? Post a link and describe what issue you're having, and tell us what of these steps you've already tried.
 
 == Changelog ==
+= 1.4.6 (2015-03-20) =
+* "Download link" now correctly open a download dialogue instead of displaying the file
+* Title, caption and all control elements can now be turned on / off individually
+* Added support for custom style sheets (just copy original to your theme's style folder, and hack away)
+* Restructured the HTML slightly, making styling easier
+* Added specific CSS selectors for all elements
+* Fixed animation speed setting being ignored
+* Dropped quirks support for Internet Explorer 8
+* Removed help-text setting 
+
 = 1.4.5 (2013-06-09) =
 * Fit to screen edge on low rez displays (<500px)
 * Added global setting to hide title & caption
@@ -244,6 +245,9 @@ Still have problems? Post a link and describe what issue you're having, and tell
 * Release.
 
 == Upgrade Notice ==
+= 1.4.6 =
+Lots of bug fixes and performance improvements. New CSS styles!
+
 = 1.4.5 (2013-06-09) =
 Support latest jQuery. Better use of small screen estate, fixed buggy features (slideshow, swipes) and reduced system load. 
 

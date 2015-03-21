@@ -4,7 +4,7 @@ Donate link: http://flattr.com/thing/367557/Support-my-WordPress-plugins
 Tags: lightbox, jquery, nodal, image, display, ulfben
 Requires at least: 3.9
 Tested up to: 4.1.1
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 
 A drop-in replacement for Lightbox 2 and similar plugins, shedding the bulk of Prototype and Scriptaculous. Improved for mobile devices.
@@ -20,7 +20,6 @@ This version is also [adjusted for mobile devices](http://wordpress.org/extend/p
 * Swipe gestures for flicking between images on touch devices
 * Improved scaling *maximizes* use of screen space
 * Live adjustment to the browser window and orientation of your phone
-* Optional download link to display images in native app.
 
 See the plugin in action here: [http://game.hgo.se/blog/motion-capture/](http://game.hgo.se/blog/motion-capture/)
 
@@ -38,11 +37,14 @@ Any help is greatly appreciated. Thanks!
 *[//Ulf Benjaminsson](http://www.ulfben.com)*
 
 = 1.4.6 (2015-03-20) =
-* "Download link" now correctly starts download instead of displaying the file
-* Title and Captions can be turned on / off individually
-* Enabled custom style sheets (just copy original to your theme's style folder, and hack away)
-* Added specific CSS selectors for title and captions
-
+* "Download link" now correctly open a download dialogue instead of displaying the file
+* Title, caption and all control elements can now be turned on / off individually
+* Added support for custom style sheets (just copy original to your theme's style folder, and hack away)
+* Restructured the HTML slightly, making styling easier
+* Added specific CSS selectors for all elements
+* Fixed animation speed setting being ignored
+* Dropped quirks support for Internet Explorer 8
+* Removed help-text setting 
 
 = 1.4.5 (2013-06-09) =
 * Fit to screen edge on low rez displays (<500px)

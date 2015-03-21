@@ -1,6 +1,6 @@
 /**
  * WP jQuery Lightbox
- * Version 1.4.5 - 2013-06-09
+ * Version 1.4.6 - 2015-03-21
  * @author Ulf Benjaminsson (http://www.ulfben.com)
  *
  * This is a modified version of Warren Krevenkis Lightbox-port (see notice below) for use in the WP jQuery Lightbox-
@@ -34,7 +34,6 @@
  * Based on Lightbox 2 by Lokesh Dhakar (http://www.huddletogether.com/projects/lightbox2/)
  * Originally written to make use of the Prototype framework, and Script.acalo.us, now altered to use jQuery.
  **/
- /** toyNN: davidtg@comtrya.com: fixed IE7-8 incompatabilities in 1.3.* branch **/ 
 (function($){
 	//http://stackoverflow.com/a/16187766/347764	
 	function versionCompare(a, b){ 	
@@ -50,7 +49,6 @@
 		}
 		return a.length - b.length;
 	}
-
     $.fn.lightbox = function(options) {			
         var opts = $.extend({}, $.fn.lightbox.defaults, options);
 		if($("#overlay").is(':visible')){//to resize the overlay whenever doLightbox is invoked
@@ -70,16 +68,12 @@
             $(window).bind('orientationchange', resizeListener);
             $(window).bind('resize', resizeListener);
             $('#overlay').remove();
-            $('#lightbox').remove();
-            opts.isIE8 = isIE8(); // //http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
+            $('#lightbox').remove();         
             opts.inprogress = false;
 			opts.auto = -1;
 			var txt = opts.strings;
             var outerImage = '<div id="outerImageContainer"><div id="imageContainer"><iframe id="lightboxIframe" /><img id="lightboxImage"><div id="hoverNav"><a href="javascript://" title="' + txt.prevLinkTitle + '" id="prevLink"></a><a href="javascript://" id="nextLink" title="' + txt.nextLinkTitle + '"></a></div><div id="jqlb_loading"><a href="javascript://" id="loadingLink"><div id="jqlb_spinner"></div></a></div></div></div>';
-            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="titleAndCaption"></span><p id="controls"><span id="numberDisplay"></span> <span id="downloadLink"></span></p></div><div id="bottomNav">';
-            if (opts.displayHelp) {
-                imageData += '<span id="helpDisplay">' + txt.help + '</span>';
-            }
+            var imageData = '<div id="imageDataContainer" class="clearfix"><div id="imageData"><div id="imageDetails"><span id="titleAndCaption"></span><div id="controls"><span id="numberDisplay"></span> <a id="playPause" href="#"></a> <span id="downloadLink"></span></div></div><div id="bottomNav">';
             imageData += '<a href="javascript://" id="bottomNavClose" title="' + txt.closeTitle + '"><div id="jqlb_closelabel"></div></a></div></div></div>';
             var string;
             if (opts.navbarOnTop) {
@@ -109,62 +103,25 @@
             }
             opts.resizeTimeout = setTimeout(function () { doScale(); }, 50); //a delay to avoid duplicate event calls.		
         }
-        function getPageSize(){           
-            var pgDocHeight = $(document).height();
-            if (opts.isIE8 && pgDocHeight > 4096) {
-                pgDocHeight = 4096;
-            }
-			var viewportHeight = $(window).height() - opts.adminBarHeight;
-			//var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-			//var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-			//$(document).width() returns width of HTML document			
-            return new Array($(document).width(), pgDocHeight, $(window).width(), viewportHeight, $(document).height());
-        };
-        //code for IE8 check provided by http://kangax.github.com/cft/
-        function isIE8() {
-            var isBuggy = false;
-            if (document.createElement) {
-                var el = document.createElement("div");
-                if (el && el.querySelectorAll) {
-                    el.innerHTML = "<object><param name=\"\"></object>";
-                    isBuggy = el.querySelectorAll("param").length != 1;
-                }
-                el = null;
-            }
-            return isBuggy;
-        };
+        function getPageSize(){           						
+			return { 
+				pageWidth:$(document).width(), //returns width of HTML document
+				pageHeight:$(document).height(), 
+				viewportWidth:$(window).width(),  //width of browser viewport, minus scrollbars
+				viewportHeight:$(window).height()-opts.adminBarHeight,				
+			};			
+        };       
         function getPageScroll() {
-            var xScroll = 0; var yScroll = 0;
-            if (self.pageYOffset) {
-                yScroll = self.pageYOffset;
-                xScroll = self.pageXOffset;
-            } else if (document.documentElement && document.documentElement.scrollTop) {  // Explorer 6 Strict
-                yScroll = document.documentElement.scrollTop;
-                xScroll = document.documentElement.scrollLeft;
-            } else if (document.body) {// all other Explorers
-                yScroll = document.body.scrollTop;
-                xScroll = document.body.scrollLeft;
-            }
-			if(opts.adminBarHeight && parseInt($('#wpadminbar').css('top'), 10) === 0){
+            var yScroll = $(document).scrollTop();            
+			if(opts.adminBarHeight && parseInt($('#wpadminbar').css('top'), 10) === 0){				
 				yScroll += opts.adminBarHeight;
-			}	
-            return new Array(xScroll, yScroll);
+			}
+			return {x:$(document).scrollLeft(), y:yScroll};            
         };
-		function start(imageLink) {
-           // $("select, embed, object").hide();
-            var arrayPageSize = getPageSize();
-            var arrayPagePos = getPageScroll();
+		function start(imageLink) {           
+            var pageSize = getPageSize();            
             var newTop = 0;
-            $("#overlay").hide().css({width: arrayPageSize[0] + 'px', height: arrayPageSize[1] + 'px', opacity: opts.overlayOpacity}).fadeIn(400);
-            if (opts.isIE8 && arrayPageSize[1] == 4096) {
-                if (arrayPagePos[1] >= 1000) {
-                    newTop = arrayPagePos[1] - 1000;
-                    if ((arrayPageSize[4] - (arrayPagePos[1] + 3096)) < 0) {
-                        newTop -= (arrayPagePos[1] + 3096) - arrayPageSize[4];
-                    }
-                    $("#overlay").css({ top: newTop + 'px' });
-                }
-            }
+            $("#overlay").hide().css({width: pageSize.pageWidth + 'px', height: pageSize.pageHeight + 'px', opacity: opts.overlayOpacity}).fadeIn(400);
             var imageNum = 0;  			
 			var images = [];
 			opts.downloads = {}; //to keep track of any custom download links		
@@ -178,15 +135,11 @@
 				if(opts.showTitle && title.toLowerCase() == caption.text.toLowerCase()) {
 					title = caption.html; //to keep linked captions
 					caption.html = ''; //but not duplicate the text								
-				}
-				console.log('title: "' + title + '"\ncaption html: "' + caption.html + '"\ncaption text: "' + caption.text+'"');
+				}				
 				var s= (title != '') 				? '<span id="titleText">' + title + '</span>' 			: '';					
 				s 	+= (title != '' && caption.html)? '<br />' 												: '';
-				s 	+= (caption.html != '') 		? '<span id="captionText">' + caption.html +'</span>' 	: '';
-				
-				console.log('markup: "' + s + '"\n');
-				
-				if(opts.displayDownloadLink || jqThis.attr("data-download")){							
+				s 	+= (caption.html != '') 		? '<span id="captionText">' + caption.html +'</span>' 	: '';	
+				if(opts.showDownload || jqThis.attr("data-download")){							
 					opts.downloads[images.length] = jqThis.attr("data-download"); //use length as an index. convenient since it will always be unique							
 				}						
 				images.push(new Array(this.href, s, images.length));
@@ -201,13 +154,14 @@
                 }
                 while (images[imageNum][0] != imageLink.href) { imageNum++; }
             }
-            opts.imageArray = images;			
-            setLightBoxPos(arrayPagePos[1], arrayPagePos[0]).show();// calculate top and left offset for the lightbox
+            opts.imageArray = images;
+			var scroll = getPageScroll();			
+            setLightBoxPos(scroll.y, scroll.x).show();// calculate top and left offset for the lightbox
             changeImage(imageNum);
 			setNav();
         };
 		function getTitle(jqLink){						
-			var title = jqLink.attr("title") || ''; //title of link //TODO, this is wrong
+			var title = jqLink.attr("title") || ''; 
 			if(!title){
 				var jqImg = jqLink.children('img:first-child');
 				if (jqImg.attr('title')) {
@@ -233,7 +187,7 @@
 		}
 		function setLightBoxPos(newTop, newLeft) {        
             if (opts.resizeSpeed > 0) {
-                return $('#lightbox').animate({ top: newTop+ 'px', left: newLeft+ 'px' }, 250, 'linear');                
+                return $('#lightbox').animate({ top: newTop+ 'px', left: newLeft+ 'px' }, opts.resizeSpeed, 'linear');                
             }
             return $('#lightbox').css({ top: newTop + 'px', left: newLeft + 'px' });
         };
@@ -255,7 +209,8 @@
             opts.imgPreloader = new Image();
             opts.imgPreloader.onload = function () {
                 $('#lightboxImage').attr('src', opts.imageArray[opts.activeImage][0]);
-                doScale();  // once image is preloaded, resize image container
+                updateDetails(); 
+				doScale();  // once image is preloaded, resize image container
                 preloadNeighborImages();				
             };
             opts.imgPreloader.src = opts.imageArray[opts.activeImage][0];
@@ -263,21 +218,17 @@
         function doScale() {
             if (!opts.imgPreloader) {
                 return;
-            }
+            }				
             var newWidth = opts.imgPreloader.width;
             var newHeight = opts.imgPreloader.height;
-            var arrayPageSize = getPageSize();  
-			var noScrollWidth = (arrayPageSize[2] < arrayPageSize[0]) ? arrayPageSize[0] : arrayPageSize[2]; //if viewport is smaller than page, use page width.
-			$("#overlay").css({ width: noScrollWidth + 'px', height: arrayPageSize[1] + 'px' });  
-            var maxHeight = (arrayPageSize[3]) - ($("#imageDataContainer").height() + (2 * opts.borderSize));
-            var maxWidth = (arrayPageSize[2]) - (2*opts.borderSize);			
-			if (opts.fitToScreen){
+            var pageSize = getPageSize();  
+			var noScrollWidth = (pageSize.viewportWidth < pageSize.pageWidth) ? pageSize.pageWidth : pageSize.viewportWidth; //if viewport is smaller than page, use page width.
+			$("#overlay").css({ width: noScrollWidth + 'px', height: pageSize.pageHeight + 'px' });  
+            var maxHeight = (pageSize.viewportHeight) - ($("#imageDataContainer").outerHeight(true) + (2 * opts.borderSize));
+            var maxWidth = (pageSize.viewportWidth) - (2*opts.borderSize);			
+			if(opts.fitToScreen){
 				var displayHeight = maxHeight-opts.marginSize;	
-				var displayWidth = maxWidth-opts.marginSize;	
-				if($(window).width() > 500){ //high rez display
-					displayHeight -= opts.marginSize;
-					displayWidth -= opts.marginSize;
-				}				
+				var displayWidth = maxWidth-opts.marginSize;									
 				var ratio = 1;
                 if (newHeight > displayHeight) {
                     ratio = displayHeight / newHeight; //ex. 600/1024 = 0.58					
@@ -291,24 +242,19 @@
                 newWidth = Math.round(newWidth * ratio);
                 newHeight = Math.round(newHeight * ratio);
             }        
-			var arrayPageScroll = getPageScroll();
-			var centerY = arrayPageScroll[1] + (maxHeight * 0.5);
-			var newTop = centerY - newHeight * 0.5;
-			var newLeft = arrayPageScroll[0];
+			var scroll = getPageScroll();
+			var centerY = scroll.y + (maxHeight * 0.5);
+			var newTop = centerY - (newHeight * 0.5);
+			var newLeft = scroll.x;
 			$('#lightboxImage').width(newWidth).height(newHeight);
 			resizeImageContainer(newWidth, newHeight, newTop, newLeft);           
         }
-
         function resizeImageContainer(imgWidth, imgHeight, lightboxTop, lightboxLeft) {
             opts.widthCurrent = $("#outerImageContainer").outerWidth();
             opts.heightCurrent = $("#outerImageContainer").outerHeight();
             var widthNew = Math.max(300, imgWidth + (opts.borderSize * 2)); //300 = iphone. http://wordpress.org/support/topic/image-not-resized-correctly-with-wptouch?replies=6#post-4205735
-            var heightNew = (imgHeight + (opts.borderSize * 2));
-            // scalars based on change from old to new
-            opts.xScale = (widthNew / opts.widthCurrent) * 100;
-            opts.yScale = (heightNew / opts.heightCurrent) * 100;           
-            setLightBoxPos(lightboxTop, lightboxLeft);                   
-            updateDetails(); //toyNN: moved updateDetails() here, seems to work fine.    
+            var heightNew = (imgHeight + (opts.borderSize * 2));                      
+			setLightBoxPos(lightboxTop, lightboxLeft);                    
 			$('#imageDataContainer').animate({width:widthNew}, opts.resizeSpeed, 'linear');
 			$('#outerImageContainer').animate({width:widthNew,height:heightNew}, opts.resizeSpeed, 'linear', function () {				
 					showImage();				
@@ -320,30 +266,43 @@
             }
             $('#prevLink,#nextLink').height(imgHeight);            
         };
-        function showImage() {
-            //assumes updateDetails have been called earlier!
-            $("#imageData").show();
-            $('#titleAndCaption').show();      	
+        function showImage(){                
             $('#jqlb_loading').hide();
-            if (opts.resizeSpeed > 0) {
+            showDetails();
+			if(opts.resizeSpeed > 0){
                 $('#lightboxImage').fadeIn("fast", function(){
 					onImageVisible();
 				});
-            } else {
+            }else{
                 $('#lightboxImage').show();
 				onImageVisible();
             }
             opts.inprogress = false;
         };
-		
+		function showDetails(){			
+			$('#titleAndCaption').css("opacity", 1);			
+			if(opts.showDownload){
+				$('#downloadLink').css('opacity', 1);
+			}					
+            if(opts.showNumbers){
+				$('#numberDisplay').css('opacity', 1);
+			}
+			if(opts.slidehowSpeed){
+				$('#playPause').css('opacity', 1);
+			}
+			if(opts.resizeSpeed > 0){
+				$("#imageDetails").animate({opacity: 1}, 'fast');
+			}else{
+				$("#imageDetails").css('opacity', 1);
+			}
+		}
 		function onImageVisible(){
 			if(opts.auto != -1){				
 				clearTimeout(opts.auto); //in case we came here after mouse/keyboard interaction
 				opts.auto = setTimeout(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
 			}			
 			enableKeyboardNav();				
-		}
-		
+		}		
 		function preloadNeighborImages() {
             if (opts.imageArray.length > 1) {
                 preloadNextImage = new Image();
@@ -361,31 +320,36 @@
                 }
             }
         };
-
-        function updateDetails() {
-            $('#numberDisplay').html('');
-            $('#titleAndCaption').html('').hide();
+        function updateDetails(){ //update caption, title and control, and makes them invisible while we animate into position.                        
 			var images = opts.imageArray;
 			var txt = opts.strings;
 			var i = opts.activeImage;
-			var downloadIndex = images[i][2];
-            if(images[i][1] != ''){
-                $('#titleAndCaption').html(images[i][1]).show();
-            }        
-            var pos = (images.length > 1 && opts.showCaption) ? txt.image + (i + 1) + txt.of + images.length : '';            
+			var downloadIndex = images[i][2];            		
+            var pos = (opts.showNumbers && images.length > 1) ? txt.image + (i + 1) + txt.of + images.length : '';            
+			$("#imageDetails").css("opacity", 0);					
+			if(images[i][1] != ''){
+                $('#titleAndCaption').css('opacity', 0).html(images[i][1]);
+            }else{	
+				$('#titleAndCaption').empty();
+			}
+			if(opts.showNumbers){
+                $('#numberDisplay').css('opacity', 0).html(pos);
+            }else{
+				$('#numberDisplay').empty();
+			}
 			if(opts.slidehowSpeed && images.length > 1){	
 				var pp = (opts.auto === -1) ? txt.play : txt.pause;
-				pos += ' <a id="playpause" href="#">' + pp + '</a>';				
-			}			
-			if(opts.displayDownloadLink || opts.downloads[downloadIndex]){
-				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 				
-				$('#downloadLink').empty().append($('<a>').attr('href', url).attr('download', '').text(txt.download)).show();
+				$('#playPause').css('opacity', 0).attr('href', '#').text(pp);				
 			}else{
-				$('#downloadLink').hide();
-			}			
-            if(pos != ''){
-                $('#numberDisplay').html(pos).show();
-            }			
+				$('#playPause').empty();
+			}				
+			if(opts.showDownload || opts.downloads[downloadIndex]){
+				var url = opts.downloads[downloadIndex] ? opts.downloads[downloadIndex] : images[i][0]; 				
+				$('#downloadLink').css('opacity', 0).html($('<a>').attr('href', url).attr('target', '_blank').attr('download', '').text(txt.download));
+			}else{
+				$('#downloadLink').empty();
+			}
+			var position = $('#downloadLink').position();			
         };	
         function setNav() {
             if (opts.imageArray.length > 1) {                
@@ -404,13 +368,13 @@
 					});
 				}
 				if(opts.slidehowSpeed){				
-					$("#numberDisplay").unbind('click').click(function() {										
+					$('#playPause').unbind('click').click(function() {										
 						if(opts.auto != -1){
-							$(this).children("a").text(opts.strings.play);							
+							$(this).text(opts.strings.play);							
 							clearTimeout(opts.auto);							
 							opts.auto = -1;
 						}else{											
-							$(this).children("a").text(opts.strings.pause);						
+							$(this).text(opts.strings.pause);						
 							opts.auto = setTimeout(function(){changeImage((opts.activeImage == (opts.imageArray.length - 1)) ? 0 : opts.activeImage + 1);}, opts.slidehowSpeed);
 						}
 						return false;
@@ -424,8 +388,7 @@
 			clearTimeout(opts.auto);
 			opts.auto = -1;
             $('#lightbox').hide();
-            $('#overlay').fadeOut();
-           // $('select, object, embed').show();
+            $('#overlay').fadeOut();         
         };
         function keyboardAction(e) {
             var o = e.data.opts;
@@ -453,24 +416,21 @@
     };    
     $.fn.lightbox.defaults = {
 		showCaption:false,
+		showNumbers:true,
 		adminBarHeight:0, //28
         overlayOpacity: 0.8,
         borderSize: 10,
         imageArray: new Array,
         activeImage: null,
         inprogress: false, //this is an internal state variable. don't touch.
-        widthCurrent: 250,
-        heightCurrent: 250,
-        xScale: 1,
-        yScale: 1,
+        widthCurrent: 300,
+        heightCurrent: 300,
         showTitle: true,       
-        imageClickClose: true,
-        followScroll: false,
-        isIE8: false  //toyNN:internal value only
+        imageClickClose: true
     };	
 	$(document).ready(doLightBox);	
 })(jQuery);
-//you can call this manually at any time to activate the lightboxing. (useful for ajax-loaded content)
+//you can call doLightBox() manually at any time to activate the lightboxing. Useful for AJAX-loaded content.
 function doLightBox(){
 	var haveConf = (typeof JQLBSettings == 'object');	
 	var ss, rs, ms = 0;
@@ -483,8 +443,7 @@ function doLightBox(){
 	if(haveConf && JQLBSettings.marginSize){
 		ms = parseInt(JQLBSettings.marginSize);
 	}
-	var default_strings = {
-		help: ' Browse images with your keyboard: Arrows or P(revious)/N(ext) and X/C/ESC for close.',
+	var default_strings = {		
 		prevLinkTitle: 'previous image',
 		nextLinkTitle: 'next image',		
 		closeTitle: 'close image gallery',
@@ -496,16 +455,15 @@ function doLightBox(){
 	};
 	jQuery('a[rel^="lightbox"]').lightbox({
 		adminBarHeight: jQuery('#wpadminbar').height() || 0,
-		linkTarget: (haveConf && JQLBSettings.linkTarget.length) ? JQLBSettings.linkTarget : '_self',
+		showNumbers: (haveConf && JQLBSettings.showNumbers == '0') ? false : true,
 		showCaption: (haveConf && JQLBSettings.showCaption == '0') ? false : true,
-		showTitle: (haveConf && JQLBSettings.showTitle == '0') ? false : true,
-		displayHelp: (haveConf && JQLBSettings.help.length) ? true : false,
+		showTitle: (haveConf && JQLBSettings.showTitle == '0') ? false : true,		
 		marginSize: (haveConf && ms) ? ms : 0,
 		fitToScreen: (haveConf && JQLBSettings.fitToScreen == '1') ? true : false,
 		resizeSpeed: (haveConf && rs >= 0) ? rs : 400,
 		slidehowSpeed: (haveConf && ss >= 0) ? ss : 4000,
-		displayDownloadLink: (haveConf && JQLBSettings.displayDownloadLink == '0') ? false : true,
+		showDownload: (haveConf && JQLBSettings.showDownload == '0') ? false : true,
 		navbarOnTop: (haveConf && JQLBSettings.navbarOnTop == '0') ? false : true,		
-		strings: (haveConf && typeof JQLBSettings.help == 'string') ? JQLBSettings : default_strings
+		strings: (haveConf && typeof JQLBSettings.prevLinkTitle == 'string') ? JQLBSettings : default_strings
 	});	
 }

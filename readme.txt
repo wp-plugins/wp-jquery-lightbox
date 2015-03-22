@@ -36,6 +36,9 @@ Any help is greatly appreciated. Thanks!
 
 *[//Ulf Benjaminsson](http://www.ulfben.com)*
 
+= trunk (2015-03-xx) =
+* Fixed: centering image no works on small images too.
+
 = 1.4.6 (2015-03-20) =
 * "Download link" now correctly open a download dialogue instead of displaying the file
 * Title, caption and all control elements can now be turned on / off individually

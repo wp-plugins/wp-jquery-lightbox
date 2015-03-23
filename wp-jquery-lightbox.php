@@ -62,13 +62,13 @@ function jqlb_register_settings(){
 	register_setting( 'jqlb-settings-group', 'jqlb_use_theme_styles', 'jqlb_bool_intval');			
 	add_option('jqlb_showTitle', 1);
 	add_option('jqlb_showCaption', 1);
-	add_option('jqlb_showNumbers', 1);
-	add_option('jqlb_link_target', '_self');
+	add_option('jqlb_showNumbers', 1);	
 	add_option('jqlb_automate', 1); //default is to auto-lightbox.
 	add_option('jqlb_comments', 1);
 	add_option('jqlb_resize_on_demand', 0); 
 	add_option('jqlb_showDownload', 0); 
 	add_option('jqlb_navbarOnTop', 0);
+	add_option('jqlb_margin_size', 0);
 	add_option('jqlb_resize_speed', 400); 
 	add_option('jqlb_slideshow_speed', 4000); 	
 	add_option('jqlb_use_theme_styles', 0); 
